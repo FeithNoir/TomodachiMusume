@@ -1,0 +1,37 @@
+body {
+  font-family: "Inter", sans-serif;
+  overflow: hidden; /* Evitar scrollbars innecesarios */
+  background-color: #fef3c7; /* amber-100, un fondo claro general */
+}
+.barracks-bg {
+  /* Fondo que simula un tablón de madera */
+  background-color: #b45309; /* amber-700 */
+  background-image: url(img/bg.jpg);
+  /* Podrías añadir una textura sutil de madera aquí:
+            background-image: url('URL_DE_TEXTURA_MADERA_SUTIL.png');
+            */
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+.anime-girl {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 60vh;
+  max-height: 500px;
+  transition: opacity 0.5s ease-in-out;
+}
+.progress-bar {
+  transition: width 0.5s ease-in-out;
+}
+/* Modal de Diálogo estilo RPG */
+#talkModal {
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
