@@ -1,15 +1,12 @@
 body {
   font-family: "Inter", sans-serif;
-  overflow: hidden; /* Evitar scrollbars innecesarios */
-  background-color: #fef3c7; /* amber-100, un fondo claro general */
+  overflow: hidden;
+  background-color: #fef3c7;
 }
+
 .barracks-bg {
-  /* Fondo que simula un tablón de madera */
-  background-color: #b45309; /* amber-700 */
+  background-color: #b45309;
   background-image: url(img/bg.jpg);
-  /* Podrías añadir una textura sutil de madera aquí:
-            background-image: url('URL_DE_TEXTURA_MADERA_SUTIL.png');
-            */
   background-size: cover;
   background-position: center;
   width: 100vw;
@@ -19,6 +16,7 @@ body {
   left: 0;
   z-index: -1;
 }
+
 .anime-girl {
   position: absolute;
   bottom: 10px;
@@ -28,10 +26,62 @@ body {
   max-height: 500px;
   transition: opacity 0.5s ease-in-out;
 }
+
 .progress-bar {
   transition: width 0.5s ease-in-out;
 }
-/* Modal de Diálogo estilo RPG */
+
 #talkModal {
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.modal-content-panel {
+  background-color: #78350f;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.dialogue-option-button {
+  background-color: #92400e;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  margin: 0.25rem;
+  transition: background-color 0.3s;
+}
+
+.dialogue-option-button:hover {
+  background-color: #a14b15;
+}
+
+.action-button {
+  background-color: #b45309;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.action-button:hover {
+  background-color: #c35b11;
 }
