@@ -23,12 +23,14 @@
     </div>
 
     <!-- Panel del Menú -->
-    <div id="menu-panel" class="fixed top-0 left-0 h-full w-64 p-4 z-40 transform -translate-x-full">
+    <div id="menu-panel" class="fixed top-0 left-0 h-full w-64 p-4 bg-amber-800 bg-opacity-90 backdrop-blur-sm z-40 transform -translate-x-full flex flex-col">
         <h2 class="text-xl font-semibold mb-4 text-center">Menú</h2>
-        <a href="#" class="menu-item">Opciones</a>
-        <a href="#" class="menu-item">Guardar (Simulado)</a>
-        <a href="#" class="menu-item">Galería (Próximamente)</a>
-        <a href="#" class="menu-item">Salir (Simulado)</a>
+        <div class="flex flex-col space-y-2">
+            <a href="#" class="menu-item p-2 hover:bg-amber-700 rounded">Opciones</a>
+            <a href="#" class="menu-item p-2 hover:bg-amber-700 rounded">Guardar (Simulado)</a>
+            <a href="#" class="menu-item p-2 hover:bg-amber-700 rounded">Galería (Próximamente)</a>
+            <a href="#" class="menu-item p-2 hover:bg-amber-700 rounded">Salir (Simulado)</a>
+        </div>
     </div>
 
     <!-- Indicadores de Estado -->
@@ -69,9 +71,10 @@
     </div>
 
     <!-- Modal de Hablar - Estilo RPG -->
-    <div id="talkModal" class="fixed bottom-0 left-0 right-0 p-3 sm:p-4 z-50 hidden opacity-0 translate-y-full">
-        <div class="bg-amber-800 p-4 sm:p-5 rounded-t-lg shadow-2xl text-amber-50 w-full mx-auto max-w-2xl">
-            <div id="characterName" class="bg-amber-900 text-center text-md sm:text-lg font-bold p-2 rounded-t-md -mt-4 sm:-mt-5 mx-auto w-fit px-4 shadow-md">Chica Anime</div>
+    <div id="talkModal" class="fixed bottom-0 left-0 right-0 z-50 hidden opacity-0 mb-12">
+        <div class="bg-amber-800 p-4 sm:p-5 rounded-t-lg shadow-2xl text-amber-50 w-full mx-auto max-w-2xl border-4 border-amber-900">
+            <!-- Poner span a altura de 0.8rem para que se vea como quiero -->
+            <span id="characterName" class="bg-amber-900 text-center text-md sm:text-lg font-bold p-2 rounded-t-md -mt-4 sm:-mt-5 mx-auto w-fit px-4 shadow-md absolute -top-4 left-1/2 transform -translate-x-1/2">Chica Anime</span>
             <p id="dialogueText" class="my-4 text-center text-sm sm:text-base min-h-[40px] sm:min-h-[50px]">Ella te mira expectante...</p>
             <div id="dialogueOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                 <!-- Las opciones se cargarán aquí -->
