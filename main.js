@@ -4,8 +4,8 @@ const gameState = {
   money: 100,
   items: [],
   girlOutfit: "default",
-  girlImageDefault: "/img/character.png",
-  girlImageAlt: "/img/character.png",
+  girlImageDefault: "img/character.png",
+  girlImageAlt: "img/character-happy.png",
   characterName: "Chica Anime",
 };
 
@@ -219,6 +219,17 @@ document.getElementById("talkButtonMobile").addEventListener("click", startDialo
 document.getElementById("equipButtonMobile").addEventListener("click", () => showModal(equipModal));
 document.getElementById("interactButtonMobile").addEventListener("click", () => showModal(interactModal));
 document.getElementById("missionButtonMobile").addEventListener("click", startMission);
+
+// Agregar evento de clic al personaje
+animeGirlImg.addEventListener("click", () => {
+  // Cambiar la imagen a "character-happy.png"
+  animeGirlImg.src = gameState.girlImageAlt;
+
+  // Cambiar de vuelta a la imagen original después de unos segundos
+  setTimeout(() => {
+    animeGirlImg.src = gameState.girlOutfit === "default" ? gameState.girlImageDefault : gameState.girlImageAlt;
+  }, 600); // Cambiar de vuelta después de 2 segundos
+});
 
 // Inicializar UI
 updateUI();
