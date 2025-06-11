@@ -1,7 +1,7 @@
 // --- BASE DE DATOS DE OBJETOS (Simulada) ---
 const masterItemList = {
-    'cheap_shirt': { name: 'Camisa Barata', type: 'top', path: './img/tops/CheapShirt.png' },
-    'cheap_pants': { name: 'Pantalones Baratos', type: 'bottom', path: './img/bottoms/CheapPants.png' },
+    'cheap_shirt': { name: 'Camisa Barata', type: 'top', path: './img/tops/cheapShirt.png' },
+    'cheap_pants': { name: 'Pantalones Baratos', type: 'bottom', path: './img/bottoms/cheapPants.png' },
 };
 
 // --- ESTADO DEL JUEGO ---
