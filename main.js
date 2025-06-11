@@ -1,7 +1,7 @@
 // --- BASE DE DATOS DE OBJETOS (Simulada) ---
 const masterItemList = {
-    'cheap_shirt': { name: 'Camisa Barata', type: 'top', path: 'img/tops/CheapShirt.png' },
-    'cheap_pants': { name: 'Pantalones Baratos', type: 'bottom', path: 'img/bottoms/CheapPants.png' },
+    'cheap_shirt': { name: 'Camisa Barata', type: 'top', path: './img/tops/CheapShirt.png' },
+    'cheap_pants': { name: 'Pantalones Baratos', type: 'bottom', path: './img/bottoms/CheapPants.png' },
 };
 
 // --- ESTADO DEL JUEGO ---
@@ -15,8 +15,8 @@ const gameState = {
         bottom: null,
     },
     expression: {
-        eyes: 'img/expressions/eyes_1.png',
-        mouth: 'img/expressions/mouth_1.png',
+        eyes: './img/expressions/eyes_1.png',
+        mouth: './img/expressions/mouth_1.png',
     },
     characterName: "Eleanora",
 };
@@ -110,8 +110,8 @@ closeInventoryModalButton.addEventListener("click", () => hideModal(inventoryMod
 // --- LÓGICA DE EXPRESIONES Y ANIMACIONES ---
 function startBlinking() {
     setInterval(() => {
-        if (gameState.expression.eyes === "img/expressions/eyes_1.png") {
-            characterEyes.src = "img/expressions/eyes_2.png";
+        if (gameState.expression.eyes === "./img/expressions/eyes_1.png") {
+            characterEyes.src = "./img/expressions/eyes_2.png";
             setTimeout(() => {
                 characterEyes.src = gameState.expression.eyes;
             }, 150);
@@ -120,8 +120,8 @@ function startBlinking() {
 }
 
 characterContainer.addEventListener("click", () => {
-    characterEyes.src = "img/expressions/eyes_2.png";
-    characterMouth.src = "img/expressions/mouth_2.png";
+    characterEyes.src = "./img/expressions/eyes_2.png";
+    characterMouth.src = "./img/expressions/mouth_2.png";
     setTimeout(() => {
         characterEyes.src = gameState.expression.eyes;
         characterMouth.src = gameState.expression.mouth;
