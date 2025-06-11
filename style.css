@@ -19,13 +19,24 @@ body {
   z-index: -1;
 }
 
-.anime-girl {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+/* Contenedor del personaje */
+.character-container {
   height: 80vh;
-  transition: opacity 0.5s ease-in-out;
+  width: auto;
+  cursor: pointer;
+  pointer-events: none; /* <-- AÑADIDO: El contenedor ya no captura clics */
+}
+
+/* Cada capa del personaje */
+.character-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  transition: opacity 0.2s ease-in-out;
+  pointer-events: auto; /* <-- AÑADIDO: Cada capa individualmente sí captura clics */
 }
 
 .progress-bar {
@@ -36,6 +47,40 @@ body {
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
+/* Estilos para el inventario (NUEVO) */
+.inventory-item {
+  position: relative;
+  background-color: #92400e;
+  border: 2px solid #b45309;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.inventory-item:hover {
+  border-color: #f59e0b;
+  transform: scale(1.05);
+}
+
+.inventory-item.equipped {
+  border-color: #10b981; /* Verde para indicar equipado */
+  box-shadow: 0 0 10px #10b981;
+}
+
+.item-quantity {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 0.75rem;
+  padding: 0 4px;
+  border-radius: 99px;
+}
+
+/* Resto de estilos (modal, botones, etc.) sin cambios */
 .modal {
   position: fixed;
   top: 0;
@@ -103,4 +148,8 @@ body {
   .action-button {
     padding: 0.75rem;
   }
+}
+
+.hidden-item {
+  display: none;
 }
