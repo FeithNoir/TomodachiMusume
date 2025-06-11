@@ -32,7 +32,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  height: 100%;
+  height: 130vh;
   width: 100%;
   object-fit: contain;
   transition: opacity 0.2s ease-in-out;
@@ -40,6 +40,7 @@ body {
 }
 
 .progress-bar {
+  background: #f59e0b;
   transition: width 0.5s ease-in-out;
 }
 
@@ -134,6 +135,15 @@ body {
   background-color: #c35b11;
 }
 
+.hidden-item {
+  display: none;
+}
+
+.disabled-link {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 /* Estilos para tablets y dispositivos más grandes */
 @media (min-width: 640px) {
   .modal-content-panel {
@@ -148,8 +158,8 @@ body {
   .action-button {
     padding: 0.75rem;
   }
-}
 
-.hidden-item {
-  display: none;
+  .character-layer {
+    height: 100%;
+  }
 }

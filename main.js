@@ -9,7 +9,8 @@ const gameState = {
     affinity: 50,
     money: 100,
     energy: 100,
-    inventory: [], // Ahora es un array de objetos: { id: 'item_id', quantity: 1 }
+    satiety: 0,
+    inventory: [],
     equipped: {
         top: null,
         bottom: null,
@@ -25,6 +26,17 @@ const gameState = {
 const MAX_INVENTORY_SLOTS = 20;
 const MAX_STACK_SIZE = 10;
 const MISSION_ENERGY_COST = 10;
+const SAVE_KEY = 'tomodachiMusumeSave';
+const ENERGY_RECOVERY_RATE = 1; // Puntos de energía a recuperar por tick
+const ENERGY_RECOVERY_INTERVAL = 3000; // 3 segundos (100 puntos en 5 minutos)
+const SATIETY_DECAY_RATE = 1; // Puntos de saciedad a perder por tick
+const SATIETY_DECAY_INTERVAL = 3000; // 3 segundos (100 puntos en 5 minutos)
+const FEED_SATIETY_COST = 20; // Cuánta "saciedad" cuesta alimentar
+const FEED_ENERGY_GAIN = 5; // Cuánta energía da alimentar
+
+// --- GESTIÓN DE TIMERS ---
+let energyRecoveryTimerId = null;
+let satietyDecayTimerId = null;
 
 // --- ELEMENTOS DEL DOM ---
 const characterContainer = document.getElementById("characterContainer");
@@ -43,11 +55,50 @@ const inventoryModal = document.getElementById("inventoryModal");
 const interactModal = document.getElementById("interactModal");
 const missionModal = document.getElementById("missionModal");
 const notificationModal = document.getElementById("notificationModal");
+const saveButton = document.getElementById("saveButton");
+const satietyDisplay = document.getElementById("satietyDisplay");
 
 // --- LÓGICA DE INVENTARIO ---
 const inventoryGrid = document.getElementById("inventoryGrid");
 const inventorySlotsDisplay = document.getElementById("inventorySlots");
 const closeInventoryModalButton = document.getElementById("closeInventoryModal");
+
+// --- LÓGICA DE RECUPERACIÓN DE ESTADÍSTICAS ---
+function startEnergyRecovery() {
+    // Si ya hay un timer corriendo, no hacemos nada.
+    if (energyRecoveryTimerId) return;
+
+    console.log("Iniciando recuperación de energía...");
+    energyRecoveryTimerId = setInterval(() => {
+        if (gameState.energy < 100) {
+            gameState.energy += ENERGY_RECOVERY_RATE;
+            updateUI();
+        } else {
+            // Cuando la energía llega a 100, detenemos el timer.
+            console.log("Energía al máximo. Deteniendo recuperación.");
+            clearInterval(energyRecoveryTimerId);
+            energyRecoveryTimerId = null; // Reseteamos el ID.
+        }
+    }, ENERGY_RECOVERY_INTERVAL);
+}
+
+function startSatietyDecay() {
+    // Si ya hay un timer corriendo, no hacemos nada.
+    if (satietyDecayTimerId) return;
+
+    console.log("Iniciando digestión (pérdida de saciedad)...");
+    satietyDecayTimerId = setInterval(() => {
+        if (gameState.satiety > 0) {
+            gameState.satiety -= SATIETY_DECAY_RATE;
+            updateUI();
+        } else {
+            // Cuando la saciedad llega a 0, detenemos el timer.
+            console.log("Saciedad a cero. Deteniendo digestión.");
+            clearInterval(satietyDecayTimerId);
+            satietyDecayTimerId = null; // Reseteamos el ID.
+        }
+    }, SATIETY_DECAY_INTERVAL);
+}
 
 function addItemToInventory(itemId, quantity = 1) {
     if (!masterItemList[itemId]) {
@@ -141,6 +192,7 @@ function startMission() {
         return;
     }
     gameState.energy -= MISSION_ENERGY_COST;
+    startEnergyRecovery();
     updateUI();
     missionTitle.textContent = "Enviando a Misión...";
     missionResult.textContent = "";
@@ -213,7 +265,8 @@ function updateUI() {
     // Estado
     affinityDisplay.textContent = gameState.affinity;
     moneyDisplay.textContent = gameState.money;
-    energyDisplay.textContent = gameState.energy;
+    energyDisplay.textContent = Math.floor(gameState.energy);
+    satietyDisplay.textContent = Math.floor(gameState.satiety);
 
     // --- Personaje ---
     // Top (Camisa)
@@ -328,19 +381,69 @@ function startDialogue() {
     showTalkModal();
 }
 
+// <-- Función para guardar el juego
+function saveGame() {
+    try {
+        localStorage.setItem(SAVE_KEY, JSON.stringify(gameState));
+        showNotification("Progreso Guardado", "¡Tu partida se ha guardado correctamente!");
+    } catch (error) {
+        console.error("Error al guardar la partida:", error);
+        showNotification("Error", "No se pudo guardar la partida. El almacenamiento podría estar lleno.");
+    }
+}
+
+// <-- Función para cargar el juego
+function loadGame() {
+    const savedData = localStorage.getItem(SAVE_KEY);
+    if (!savedData) {
+        return false; // No hay partida guardada
+    }
+
+    try {
+        const savedState = JSON.parse(savedData);
+        // Usamos Object.assign para fusionar el estado guardado en nuestro gameState actual.
+        // Esto preserva las funciones y la estructura si en el futuro añadimos nuevas propiedades.
+        Object.assign(gameState, savedState);
+        console.log("Partida cargada exitosamente.");
+        return true;
+    } catch (error) {
+        console.error("Error al cargar datos guardados (posiblemente corruptos). Empezando de cero.", error);
+        localStorage.removeItem(SAVE_KEY); // Limpiamos los datos corruptos
+        return false;
+    }
+}
+
 // --- LÓGICA DE INTERACCIÓN ---
-// <-- CORRECCIÓN: Se ha añadido la lógica de los botones del modal de interacción.
 const feedButton = document.getElementById("feedButton");
 const playMinigameButton = document.getElementById("playMinigameButton");
 const closeInteractModalButton = document.getElementById("closeInteractModal");
 
 feedButton.addEventListener("click", () => {
+    if (gameState.satiety >= 100) {
+        showNotification("No tiene hambre", "Eleanora está totalmente llena ahora mismo.");
+        hideModal(interactModal);
+        return;
+    }
+
+    // Gana saciedad (se llena)
+    gameState.satiety += FEED_SATIETY_GAIN;
+    if (gameState.satiety > 100) gameState.satiety = 100;
+    
+    // Gana energía
+    gameState.energy += FEED_ENERGY_GAIN;
+    if (gameState.energy > 100) gameState.energy = 100;
+
+    // Gana afinidad
     gameState.affinity += 5;
     if (gameState.affinity > 100) gameState.affinity = 100;
+
+    startSatietyDecay();
+    
     updateUI();
-    showNotification("Alimentar", "Le diste algo de comer. ¡Parece contenta! (+5 Afinidad)");
+    showNotification("Alimentar", `¡Parece contenta! (+5 Afinidad, +${FEED_ENERGY_GAIN} Energía)`);
     hideModal(interactModal);
 });
+
 
 playMinigameButton.addEventListener("click", () => {
     showNotification("Minijuego", "Esta función estará disponible pronto. ¡Imagina que jugaron un divertido juego!");
@@ -367,6 +470,29 @@ document.getElementById("equipButtonMobile").addEventListener("click", () => {
 document.getElementById("interactButtonMobile").addEventListener("click", () => showModal(interactModal));
 document.getElementById("missionButtonMobile").addEventListener("click", startMission);
 
+// <-- NUEVO: Event listener para el botón de guardar
+saveButton.addEventListener('click', (e) => {
+    e.preventDefault(); // Prevenimos que el link '#' nos lleve al tope de la página
+    saveGame();
+});
+
 // --- INICIO DEL JUEGO ---
-updateUI();
-startBlinking();
+// <-- NUEVO: Función principal que se ejecuta al cargar la página
+function initializeGame() {
+    if (loadGame()) {
+        // Si loadGame() devuelve true, es que se cargó una partida
+        showNotification("¡Bienvenida de nuevo!", "Tu partida ha sido cargada.");
+        if (gameState.energy < 100) startEnergyRecovery();
+        if (gameState.satiety > 0) startSatietyDecay();
+    }
+    
+    // Una vez que el juego ha empezado (sea nuevo o cargado), habilitamos el botón de guardar
+    saveButton.classList.remove('disabled-link');
+    
+    // Actualizamos la UI con el estado final (nuevo o cargado)
+    updateUI();
+    // startBlinking(); // La animación de parpadeo, si la quieres reactivar
+}
+
+// Ejecutamos la función de inicialización al cargar el script
+initializeGame();

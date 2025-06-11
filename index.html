@@ -33,12 +33,14 @@
     </div>
 
     <!-- Panel del Menú -->
-    <div id="menu-panel"
-        class="fixed top-0 left-0 h-full w-64 p-4 bg-amber-800 bg-opacity-90 backdrop-blur-sm z-40 transform -translate-x-full flex flex-col">
+    <div id="menu-panel" class="fixed top-0 left-0 h-full w-64 p-4 bg-amber-800 bg-opacity-90 backdrop-blur-sm z-40 transform -translate-x-full flex flex-col">
         <h2 class="text-xl font-semibold mb-4 text-center">Menú</h2>
         <div class="flex flex-col space-y-2">
             <a href="#" class="menu-item p-2 hover:bg-amber-700 rounded">Opciones</a>
-            <a href="#" class="menu-item p-2 hover:bg-amber-700 rounded">Guardar (Simulado)</a>
+            
+            <!-- AÑADIMOS UN ID Y UNA CLASE PARA DESHABILITARLO -->
+            <a href="#" id="saveButton" class="menu-item p-2 hover:bg-amber-700 rounded disabled-link">Guardar</a>
+
             <a href="#" class="menu-item p-2 hover:bg-amber-700 rounded">Galería (Próximamente)</a>
             <a href="#" class="menu-item p-2 hover:bg-amber-700 rounded">Salir (Simulado)</a>
         </div>
@@ -50,6 +52,7 @@
         <div><span class="font-semibold">Afinidad: </span><span id="affinityDisplay">50</span></div>
         <div><span class="font-semibold">Dinero: $</span><span id="moneyDisplay">100</span></div>
         <div><span class="font-semibold">Energía: ⚡</span><span id="energyDisplay">100</span></div>
+        <div><span class="font-semibold">Saciedad: 🧡</span><span id="satietyDisplay">100</span></div>
     </div>
 
     <!-- Iconos de Acciones (Responsive) -->
@@ -117,7 +120,7 @@
         </div>
     </div>
 
-    <!-- Modal de Inventario (NUEVO) -->
+    <!-- Modal de Inventario -->
     <div id="inventoryModal" class="modal hidden opacity-0">
         <div class="modal-content-panel !max-w-md">
             <h3 class="text-xl font-bold mb-4">Inventario (<span id="inventorySlots">0</span>/20)</h3>
@@ -148,7 +151,7 @@
     <div id="missionModal" class="modal hidden opacity-0">
         <div class="modal-content-panel">
             <h3 id="missionTitle" class="text-xl font-bold mb-4">Enviando a Misión...</h3>
-            <div id="missionProgressContainer" class="progress-bar-container my-4">
+            <div id="missionProgressContainer" class="progress-bar-container rounded my-4">
                 <div id="missionProgressBar" class="progress-bar" style="width: 0%;">0%</div>
             </div>
             <p id="missionResult" class="mt-4 text-center"></p>
