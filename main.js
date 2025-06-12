@@ -562,16 +562,27 @@ function startBlinking() {
     }, Math.random() * 4000 + 3000);
 }
 
+// Variable para controlar si hay una reacción en curso
+let isReacting = false;
+
 characterContainer.addEventListener("click", () => {
-    // Encontrar la reacción correcta según la afinidad
+    // Si ya hay una reacción, no hacemos nada para evitar solapamientos
+    if (isReacting) return;
+
     const currentReaction = affinityReactions
-        .slice() // Creamos una copia para no modificar el original
-        .reverse() // Empezamos desde la afinidad más alta
+        .slice()
+        .reverse()
         .find(reaction => gameState.affinity >= reaction.level);
 
     if (currentReaction) {
+        isReacting = true; // Bloqueamos nuevas reacciones
+
+        // Guardamos la expresión actual ANTES de cambiarla
+        const previousEyes = characterEyes.src;
+        const previousMouth = characterMouth.src;
+
         // Mostrar diálogo de reacción
-        reactionDialogue.textContent = currentReaction.text;
+        reactionDialogue.textContent = currentReaction.text[gameState.language]; // Usamos i18n
         reactionDialogue.classList.remove('opacity-0');
 
         // Cambiar expresión
@@ -581,9 +592,11 @@ characterContainer.addEventListener("click", () => {
         // Ocultar todo después de un tiempo
         setTimeout(() => {
             reactionDialogue.classList.add('opacity-0');
-            characterEyes.src = gameState.expression.eyes;
-            characterMouth.src = gameState.expression.mouth;
-        }, 1500); // Mantenemos la reacción por 1.5 segundos
+            // Volvemos a la expresión que había JUSTO ANTES del clic
+            characterEyes.src = previousEyes;
+            characterMouth.src = previousMouth;
+            isReacting = false; // Desbloqueamos para futuras reacciones
+        }, 1500);
     }
 });
 
