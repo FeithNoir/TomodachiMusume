@@ -1126,37 +1126,22 @@ closeInteractModalButton.addEventListener("click", () => hideModal(interactModal
 
 
 // --- INICIALIZACIÓN Y EVENTOS ---
-document.getElementById("talkButtonDesktop").addEventListener("click", startDialogue);
-document.getElementById("equipButtonDesktop").addEventListener("click", () => {
-    renderInventory();
-    showModal(inventoryModal);
-});
-document.getElementById("interactButtonDesktop").addEventListener("click", () => showModal(interactModal));
-document.getElementById("missionButtonDesktop").addEventListener("click", startMission);
+document.getElementById("talkButton").addEventListener("click", startDialogue);
+document.getElementById("equipButton").addEventListener("click", () => { renderInventory(); });
+document.getElementById("interactButton").addEventListener("click", () => showModal(interactModal));
+document.getElementById("missionButton").addEventListener("click", startMission);
+document.getElementById("marketButton").addEventListener("click", () => showModal(marketModal));
+document.getElementById("craftingButton").addEventListener("click", openCraftingModal);
 
-document.getElementById("talkButtonMobile").addEventListener("click", startDialogue);
-document.getElementById("equipButtonMobile").addEventListener("click", () => {
-    renderInventory();
-    showModal(inventoryModal);
-});
-document.getElementById("interactButtonMobile").addEventListener("click", () => showModal(interactModal));
-document.getElementById("missionButtonMobile").addEventListener("click", startMission);
-document.getElementById("marketButtonDesktop").addEventListener("click", () => showModal(marketModal));
-document.getElementById("marketButtonMobile").addEventListener("click", () => showModal(marketModal));
-document.getElementById('closeMarketModal').addEventListener('click', () => hideModal(marketModal));
 document.getElementById('openBuyModalButton').addEventListener('click', () => { hideModal(marketModal); renderShop(); showModal(buyModal); });
 document.getElementById('openSellModalButton').addEventListener('click', () => { hideModal(marketModal); renderSellableInventory(); showModal(sellModal); });
+document.getElementById('closeMarketModal').addEventListener('click', () => hideModal(marketModal));
 document.getElementById('closeBuyModal').addEventListener('click', () => { hideModal(buyModal); showModal(marketModal); });
 document.getElementById('closeSellModal').addEventListener('click', () => { hideModal(sellModal); showModal(marketModal); });
 document.getElementById('cancelSellButton').addEventListener('click', () => hideModal(sellConfirmationModal));
-document.getElementById('craftingButtonDesktop').addEventListener('click', openCraftingModal);
-document.getElementById('craftingButtonMobile').addEventListener('click', openCraftingModal);
 document.getElementById('closeCraftingModal').addEventListener('click', () => hideModal(craftingModal));
 document.getElementById('attemptCraftButton').addEventListener('click', attemptCraft);
-document.getElementById('openOptionsButton').addEventListener('click', () => {
-    languageSelect.value = gameState.language;
-    showModal(optionsModal);
-});
+document.getElementById('openOptionsButton').addEventListener('click', () => { languageSelect.value = gameState.language; showModal(optionsModal); });
 document.getElementById('closeOptionsModal').addEventListener('click', () => hideModal(optionsModal));
 languageSelect.addEventListener('change', (e) => {
     gameState.language = e.target.value;

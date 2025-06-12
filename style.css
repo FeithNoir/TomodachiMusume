@@ -122,13 +122,15 @@ body {
 .action-button {
   background-color: #b45309;
   color: white;
-  padding: 0.5rem;
+  padding: 0.5rem; 
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s;
-  width: 100%;
+  /* Ajustamos el ancho para que sea flexible */
+  flex-grow: 1; /* Para que ocupen el espacio en la barra móvil */
+  margin: 0 0.25rem; /* Pequeño espacio entre botones en móvil */
 }
 
 .action-button:hover {
@@ -145,7 +147,7 @@ body {
 }
 
 /* Estilos para tablets y dispositivos más grandes */
-@media (min-width: 640px) {
+@media (min-width: 768px) {
   .modal-content-panel {
     padding: 2rem;
     max-width: 400px;
@@ -157,6 +159,9 @@ body {
 
   .action-button {
     padding: 0.75rem;
+    width: 100%; /* Vuelve a ocupar todo el ancho en la vista de escritorio */
+    flex-grow: 0; /* Desactivamos el crecimiento flexible */
+    margin: 0; /* Quitamos el margen horizontal */
   }
 
   .character-layer {
