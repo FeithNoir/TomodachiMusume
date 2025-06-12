@@ -10,16 +10,29 @@
 </head>
 
 <body class="bg-slate-900 text-white">
+    <!-- MODAL DE INTRODUCCIÓN (NUEVO) -->
+    <div id="introModal" class="modal hidden opacity-0 !bg-black">
+        <div id="introContent" class="text-center text-lg max-w-2xl px-4">
+            <!-- El contenido de la intro se generará aquí -->
+        </div>
+    </div>
+
     <div class="barracks-bg"></div>
 
     <!-- Contenedor del Personaje por Capas -->
     <div id="characterContainer" class="character-container">
         <img id="characterBody" src="img/character/base.png" alt="" class="character-layer">
-        <!-- Añadir la clase 'hidden-item' aquí -->
         <img id="characterBottom" src="" alt="" class="character-layer hidden-item">
         <img id="characterTop" src="" alt="" class="character-layer hidden-item">
+        <img id="characterSuit" src="" alt="" class="character-layer hidden-item">
         <img id="characterEyes" src="img/expressions/eyes_1.png" alt="" class="character-layer">
         <img id="characterMouth" src="img/expressions/mouth_1.png" alt="" class="character-layer">
+        <img id="characterHead" src="" alt="" class="character-layer hidden-item">
+
+        <!-- DIV PARA EL DIÁLOGO DE REACCIÓN -->
+        <div id="reactionDialogue" class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black bg-opacity-60 px-3 py-1 rounded-full text-sm whitespace-nowrap opacity-0 transition-opacity duration-300">
+            <!-- El texto aparecerá aquí -->
+        </div>
     </div>
 
     <!-- Menú Hamburguesa -->
@@ -33,12 +46,11 @@
     </div>
 
     <!-- Panel del Menú -->
-    <div id="menu-panel" class="fixed top-0 left-0 h-full w-64 p-4 bg-amber-800 bg-opacity-90 backdrop-blur-sm z-40 transform -translate-x-full flex flex-col">
+    <div id="menu-panel"
+        class="fixed top-0 left-0 h-full w-64 p-4 bg-amber-800 bg-opacity-90 backdrop-blur-sm z-40 transform -translate-x-full flex flex-col">
         <h2 class="text-xl font-semibold mb-4 text-center">Menú</h2>
         <div class="flex flex-col space-y-2">
-            <a href="#" class="menu-item p-2 hover:bg-amber-700 rounded">Opciones</a>
-            
-            <!-- AÑADIMOS UN ID Y UNA CLASE PARA DESHABILITARLO -->
+            <a id="openOptionsButton" class="menu-item p-2 hover:bg-amber-700 rounded text-left">Opciones</a>
             <a href="#" id="saveButton" class="menu-item p-2 hover:bg-amber-700 rounded disabled-link">Guardar</a>
 
             <a href="#" class="menu-item p-2 hover:bg-amber-700 rounded">Galería (Próximamente)</a>
@@ -78,6 +90,16 @@
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg><span class="hidden sm:inline ml-1">Misión</span></button>
+        <button id="marketButtonMobile" class="action-button !p-2 sm:!p-3"><svg xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c.51 0 .962-.343 1.087-.835l1.82-6.781a1.125 1.125 0 00-1.087-1.418H4.871c-.51 0-.962.343-1.087.835L2.25 3z" />
+            </svg><span class="hidden sm:inline ml-1">Mercado</span></button>
+        <button id="craftingButtonMobile" class="action-button !p-2 sm:!p-3"><svg xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3.75 3v11.25A2.25 2.25 0 006 16.5h12M3.75 3.75h16.5M12 18.75h3.75a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0015.75 4.5h-3.75a2.25 2.25 0 00-2.25 2.25v11.25" />
+            </svg><span class="hidden sm:inline ml-1">Crear</span></button>
     </div>
 
     <div id="desktopActions"
@@ -102,6 +124,129 @@
                 <path stroke-linecap="round" stroke-linejoin="round"
                     d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>Misión</button>
+        <button id="marketButtonDesktop" class="action-button"><svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c.51 0 .962-.343 1.087-.835l1.82-6.781a1.125 1.125 0 00-1.087-1.418H4.871c-.51 0-.962.343-1.087.835L2.25 3z" />
+            </svg>Mercado</button>
+        <button id="craftingButtonDesktop" class="action-button"><svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3.75 3v11.25A2.25 2.25 0 006 16.5h12M3.75 3.75h16.5M12 18.75h3.75a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0015.75 4.5h-3.75a2.25 2.25 0 00-2.25 2.25v11.25" />
+            </svg>Crear</button>
+    </div>
+
+    <!-- MODAL DE OPCIONES (NUEVO) -->
+    <div id="optionsModal" class="modal hidden opacity-0">
+        <div class="modal-content-panel">
+            <h3 class="text-xl font-bold mb-4">Opciones</h3>
+            <div class="text-left">
+                <label for="languageSelect" class="block mb-2 font-semibold">Idioma:</label>
+                <select id="languageSelect" class="w-full p-2 rounded bg-amber-950 text-white">
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <button id="closeOptionsModal" class="mt-6 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded w-full">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Crafteo -->
+    <div id="craftingModal" class="modal hidden opacity-0">
+        <div class="modal-content-panel !max-w-2xl">
+            <h3 class="text-xl font-bold mb-4">Mesa de Trabajo</h3>
+            <div class="flex flex-col md:flex-row gap-4">
+                <!-- Columna de Crafteo -->
+                <div class="flex-1">
+                    <h4 class="text-lg mb-2">Ranuras de Creación</h4>
+                    <div id="craftingSlotsGrid"
+                        class="grid grid-cols-2 gap-2 bg-black bg-opacity-20 p-2 rounded min-h-[160px]">
+                        <!-- Las 4 ranuras se renderizarán aquí -->
+                    </div>
+                    <button id="attemptCraftButton"
+                        class="action-button w-full justify-center mt-4 bg-green-600 hover:bg-green-700">Crear
+                        Objeto</button>
+                </div>
+                <!-- Columna de Materiales -->
+                <div class="flex-1">
+                    <h4 class="text-lg mb-2">Materiales Disponibles</h4>
+                    <div id="craftingMaterialsGrid"
+                        class="grid grid-cols-3 gap-2 bg-black bg-opacity-20 p-2 rounded max-h-64 overflow-y-auto">
+                        <!-- Los materiales del inventario se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
+            <button id="closeCraftingModal"
+                class="mt-6 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded w-full">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Libro de Recetas -->
+    <div id="recipeBookModal" class="modal hidden opacity-0">
+        <div class="modal-content-panel !max-w-lg">
+            <h3 class="text-xl font-bold mb-4">Libro de Recetas</h3>
+            <div id="recipeList" class="space-y-3 text-left max-h-80 overflow-y-auto pr-2">
+                <!-- Las recetas conocidas se cargarán aquí -->
+            </div>
+            <button id="closeRecipeBookModal"
+                class="mt-6 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded w-full">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal Principal del Mercado -->
+    <div id="marketModal" class="modal hidden opacity-0">
+        <div class="modal-content-panel">
+            <h3 class="text-xl font-bold mb-4">Mercado</h3>
+            <p class="mb-4">¿Qué te gustaría hacer?</p>
+            <div class="space-y-2">
+                <button id="openBuyModalButton" class="action-button w-full justify-center">Comprar</button>
+                <button id="openSellModalButton" class="action-button w-full justify-center">Vender</button>
+            </div>
+            <button id="closeMarketModal"
+                class="mt-6 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded w-full">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Comprar -->
+    <div id="buyModal" class="modal hidden opacity-0">
+        <div class="modal-content-panel !max-w-lg">
+            <h3 class="text-xl font-bold mb-4">Comprar Objetos</h3>
+            <div id="shopGrid"
+                class="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-black bg-opacity-20 p-2 rounded max-h-72 overflow-y-auto">
+                <!-- Los objetos de la tienda se cargarán aquí -->
+            </div>
+            <button id="closeBuyModal"
+                class="mt-6 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded w-full">Volver</button>
+        </div>
+    </div>
+
+    <!-- Modal de Vender -->
+    <div id="sellModal" class="modal hidden opacity-0">
+        <div class="modal-content-panel !max-w-lg">
+            <h3 class="text-xl font-bold mb-4">Vender Objetos</h3>
+            <div id="sellGrid"
+                class="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-black bg-opacity-20 p-2 rounded max-h-72 overflow-y-auto">
+                <!-- Los objetos del inventario para vender se cargarán aquí -->
+            </div>
+            <button id="closeSellModal"
+                class="mt-6 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded w-full">Volver</button>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación de Venta -->
+    <div id="sellConfirmationModal" class="modal hidden opacity-0">
+        <div class="modal-content-panel">
+            <h3 id="sellItemName" class="text-xl font-bold mb-2">Vender Objeto</h3>
+            <p class="mb-4">¿Cuántos quieres vender?</p>
+            <input type="number" id="sellQuantityInput" class="w-full p-2 rounded bg-amber-950 text-center mb-4" min="1"
+                value="1">
+            <div class="space-y-2">
+                <button id="confirmSellButton"
+                    class="action-button w-full justify-center bg-green-600 hover:bg-green-700">Confirmar Venta</button>
+                <button id="cancelSellButton"
+                    class="action-button w-full justify-center bg-red-600 hover:bg-red-700">Cancelar</button>
+            </div>
+        </div>
     </div>
 
     <!-- Modal de Hablar -->

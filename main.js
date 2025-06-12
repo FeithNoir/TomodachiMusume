@@ -1,26 +1,162 @@
+const UI_TEXTS = {
+    // ---- Indicadores y Menú Principal ----
+    affinity: { es: "Afinidad", en: "Affinity" },
+    money: { es: "Dinero", en: "Money" },
+    energy: { es: "Energía", en: "Energy" },
+    satiety: { es: "Saciedad", en: "Satiety" },
+    menuTitle: { es: "Menú", en: "Menu" },
+    options: { es: "Opciones", en: "Options" },
+    save: { es: "Guardar", en: "Save" },
+    gallery: { es: "Galería (Próximamente)", en: "Gallery (Coming Soon)" },
+    exit: { es: "Salir (Simulado)", en: "Exit (Simulated)" },
+    placeholder_name: { es: "Escribe tu nombre...", en: "Enter your name..." },
+    confirm: { es: "Confirmar", en: "Confirm" },
+    next: { es: "Siguiente", en: "Next" },
+
+    // ---- Botones de Acción ----
+    talk: { es: "Hablar", en: "Talk" },
+    equip: { es: "Equipo", en: "Gear" },
+    interact: { es: "Interactuar", en: "Interact" },
+    mission: { es: "Misión", en: "Mission" },
+    market: { es: "Mercado", en: "Market" },
+    craft: { es: "Crear", en: "Craft" },
+
+    // ---- Títulos de Modales ----
+    inventoryTitle: { es: "Inventario", en: "Inventory" },
+    optionsTitle: { es: "Opciones", en: "Options" },
+    language: { es: "Idioma", en: "Language" },
+    close: { es: "Cerrar", en: "Close" },
+    back: { es: "Volver", en: "Back" },
+    marketTitle: { es: "Mercado", en: "Market" },
+    marketPrompt: { es: "¿Qué te gustaría hacer?", en: "What would you like to do?" },
+    buy: { es: "Comprar", en: "Buy" },
+    sell: { es: "Vender", en: "Sell" },
+    buyTitle: { es: "Comprar Objetos", en: "Buy Items" },
+    sellTitle: { es: "Vender Objetos", en: "Sell Items" },
+    sellConfirmTitle: { es: "Vender Objeto", en: "Sell Item" },
+    sellConfirmPrompt: { es: "¿Cuántos quieres vender?", en: "How many do you want to sell?" },
+    confirmSell: { es: "Confirmar Venta", en: "Confirm Sale" },
+    cancel: { es: "Cancelar", en: "Cancel" },
+    interactTitle: { es: "Interactuar", en: "Interact" },
+    feed: { es: "Alimentar", en: "Feed" },
+    playMinigame: { es: "Jugar Minijuego (Próximamente)", en: "Play Minigame (Coming Soon)" },
+    missionTitle: { es: "Enviando a Misión...", en: "Sending on Mission..." },
+    missionComplete: { es: "¡Misión Completada!", en: "Mission Complete!" },
+    notificationTitle: { es: "Notificación", en: "Notification" },
+    understood: { es: "Entendido", en: "Understood" },
+    craftingTitle: { es: "Mesa de Trabajo", en: "Workbench" },
+    craftingSlots: { es: "Ranuras de Creación", en: "Crafting Slots" },
+    availableMaterials: { es: "Materiales Disponibles", en: "Available Materials" },
+    emptySlot: { es: "Vacío", en: "Empty" },
+    craftItem: { es: "Crear Objeto", en: "Craft Item" },
+    recipeBookTitle: { es: "Libro de Recetas", en: "Recipe Book" },
+
+    // ---- Notificaciones y Mensajes ----
+    noSellEquipped: { es: "No se puede vender", en: "Cannot Sell" },
+    noSellEquippedMsg: { es: "No puedes vender la última unidad de un objeto que llevas equipado.", en: "You can't sell the last unit of an equipped item." },
+    insufficientAffinity: { es: "Afinidad Insuficiente", en: "Insufficient Affinity" },
+    insufficientAffinityMsg: { es: (req) => ({ es: `Necesitas ${req} de afinidad para equipar esto.`, en: `You need ${req} affinity to equip this.` }) },
+    fundsInsufficient: { es: "Fondos Insuficientes", en: "Insufficient Funds" },
+    fundsInsufficientMsg: { es: "No tienes suficiente dinero para comprar esto.", en: "You don't have enough money to buy this." },
+    inventoryFull: { es: "Inventario Lleno", en: "Inventory Full" },
+    inventoryFullMsg: { es: "No tienes espacio para un nuevo tipo de objeto.", en: "You don't have space for a new type of item." },
+    stackFull: { es: "Pila Llena", en: "Stack Full" },
+    stackFullMsg: { es: (name) => ({ es: `Ya tienes el máximo de ${name}.`, en: `You already have the maximum amount of ${name}.` }) },
+    buySuccess: { es: "Compra Exitosa", en: "Purchase Successful" },
+    buySuccessMsg: { es: (name) => ({ es: `¡Has comprado ${name}!`, en: `You bought ${name}!` }) },
+    sellSuccess: { es: "Venta Exitosa", en: "Sale Successful" },
+    sellSuccessMsg: { es: (qty, name, price) => ({ es: `¡Has vendido ${qty}x ${name} por $${price}!`, en: `You sold ${qty}x ${name} for $${price}!` }) },
+    craftSuccess: { es: "¡Éxito!", en: "Success!" },
+    craftSuccessMsg: { es: (name) => ({ es: `Has creado ${name}.`, en: `You crafted ${name}.` }) },
+    craftFail: { es: "Fallo", en: "Failure" },
+    craftFailMsg: { es: "Los ingredientes no producen nada.", en: "The ingredients don't produce anything." },
+
+    // ---- Textos de Recompensas de Misión ----
+    missionReturn: { es: "¡Ha vuelto de la misión!", en: "She has returned from the mission!" },
+    missionReturnNothing: { es: "No encontró nada esta vez...", en: "She didn't find anything this time..." },
+    missionGains: { es: "Ganancias", en: "Earnings" },
+    missionItems: { es: "Objetos", en: "Items" },
+    recipeDiscoveredTitle: { es: "¡Receta Descubierta!", en: "Recipe Discovered!" },
+    recipeDiscoveredMsg: { es: (name) => ({ es: `Has encontrado la ${name}.`, en: `You found the ${name}.` }) },
+};
+
 // --- BASE DE DATOS DE OBJETOS (Simulada) ---
 const masterItemList = {
-    'cheap_shirt': { name: 'Camisa Barata', type: 'top', path: './img/tops/cheapShirt.png' },
-    'cheap_pants': { name: 'Pantalones Baratos', type: 'bottom', path: './img/bottoms/cheapPants.png' },
+    // Equipamiento
+    'cheap_shirt': { name: { es: 'Camisa Barata', en: 'Cheap Shirt' }, type: 'top', path: './img/tops/cheapShirt.png', buyPrice: 50, sellPrice: 15 },
+    'cheap_pants': { name: { es: 'Pantalones Baratos', en: 'Cheap Pants' }, type: 'bottom', path: './img/bottoms/cheapPants.png', buyPrice: 50, sellPrice: 15 },
+    'bunny_suit': { name: { es: 'Traje de Conejita', en: 'Bunny Suit' }, type: 'suit', path: './img/suits/bunny_suit.png', buyPrice: 2000, sellPrice: 500, requiredAffinity: 60 },
+    'ribbon_bow': { name: { es: 'Lazo Rojo', en: 'Red Ribbon' }, type: 'head', path: './img/head/ribbon_bow.png', buyPrice: 150, sellPrice: 40 },
+    'wooden_sword': { name: { es: 'Espada de Madera', en: 'Wooden Sword' }, type: 'weapon', path: './img/items/sword_wood.png', buyPrice: 100, sellPrice: 25, effects: { missionBonus: { nothingChance: -0.05, itemChance: 0.05 } } },
+    'iron_sword': { name: { es: 'Espada de Hierro', en: 'Iron Sword' }, type: 'weapon', path: './img/items/sword_iron.png', buyPrice: 500, sellPrice: 125, effects: { missionBonus: { nothingChance: -0.15, itemChance: 0.15 } } },
+    'steel_sword': { name: { es: 'Espada de Acero', en: 'Steel Sword' }, type: 'weapon', path: './img/items/sword_steel.png', buyPrice: 0, sellPrice: 400, effects: { missionBonus: { nothingChance: -0.25, itemChance: 0.25 } } },
+    
+    // Consumibles
+    'energy_drink': { name: { es: 'Bebida Energética', en: 'Energy Drink' }, type: 'consumable', path: './img/items/energy_drink.png', buyPrice: 30, sellPrice: 10, effects: { energy: 25 } },
+    
+    // Materiales
+    'wood_plank': { name: { es: 'Tabla de Madera', en: 'Wood Plank' }, type: 'material', path: './img/items/wood.png', buyPrice: 10, sellPrice: 2 },
+    'iron_ore': { name: { es: 'Mena de Hierro', en: 'Iron Ore' }, type: 'material', path: './img/items/iron.png', buyPrice: 40, sellPrice: 10 },
+    'steel_ingot': { name: { es: 'Lingote de Acero', en: 'Steel Ingot' }, type: 'material', path: './img/items/steel.png', buyPrice: 0, sellPrice: 80 },
+
+    // Recetas (como objetos que se aprenden)
+    'recipe_steel_sword': { name: { es: 'Receta: Espada de Acero', en: 'Recipe: Steel Sword' }, type: 'recipe', path: './img/items/recipe.png', buyPrice: 1000, sellPrice: 250, recipeId: 'steel_sword_recipe' },
+};
+
+// --- BASE DE DATOS DE RECETAS ---
+const recipes = {
+    'steel_sword_recipe': {
+        result: 'steel_sword',
+        ingredients: [
+            { id: 'steel_ingot', quantity: 5 },
+            { id: 'wood_plank', quantity: 2 },
+        ]
+    },
+    // Aquí se podrían añadir más recetas...
+};
+
+// --- BASE DE DATOS DE LA TIENDA ---
+const shopInventory = [ 'cheap_shirt', 'cheap_pants', 'wooden_sword', 'iron_sword', 'energy_drink', 'wood_plank', 'iron_ore', 'recipe_steel_sword', 'bunny_suit', 'ribbon_bow' ];
+
+// --- REACCIONES POR AFINIDAD ---
+const affinityReactions = [
+    { level: 0, eyes: './img/expressions/eyes_angry.png', mouth: './img/expressions/mouth_angry.png', text: { es: "¡No me toques!", en: "Don't touch me!" } },
+    { level: 25, eyes: './img/expressions/eyes_surprised.png', mouth: './img/expressions/mouth_surprised.png', text: { es: "¿Q-qué haces?", en: "W-what are you doing?" } },
+    { level: 50, eyes: './img/expressions/eyes_blush.png', mouth: './img/expressions/mouth_blush.png', text: { es: "E-está bien...", en: "I-it's okay..." } },
+    { level: 75, eyes: './img/expressions/eyes_happy.png', mouth: './img/expressions/mouth_happy.png', text: { es: "¡Me gusta que me acaricies!", en: "I like it when you pet me!" } }
+];
+
+// --- TABLAS DE LOOT DE MISIONES ---
+const missionLoot = {
+    materials: { 'wood_plank': 0.4, 'iron_ore': 0.1 }, // Probabilidad de encontrar cada material
+    recipes: { 'recipe_steel_sword': 0.05 } // 5% de probabilidad de encontrar esta receta
 };
 
 // --- ESTADO DEL JUEGO ---
 const gameState = {
-    affinity: 50,
+    language: 'en',
+    affinity: 10,
     money: 100,
     energy: 100,
     satiety: 0,
+    playerName: "Jefe",
+    guildName: "Oniriums",
+    hasCompletedIntro: false,
     inventory: [],
     equipped: {
         top: null,
         bottom: null,
+        suit: null,
+        head: null,
+        weapon: null,
     },
-    expression: {
-        eyes: './img/expressions/eyes_1.png',
-        mouth: './img/expressions/mouth_1.png',
-    },
+    knownRecipes: [],
+    expression: { eyes: './img/expressions/eyes_1.png', mouth: './img/expressions/mouth_1.png' },
     characterName: "Eleanora",
 };
+
+// --- GESTIÓN DE CRAFTEO ---
+let craftingSlots = [null, null, null, null];
 
 // --- CONSTANTES DE JUEGO ---
 const MAX_INVENTORY_SLOTS = 20;
@@ -57,11 +193,236 @@ const missionModal = document.getElementById("missionModal");
 const notificationModal = document.getElementById("notificationModal");
 const saveButton = document.getElementById("saveButton");
 const satietyDisplay = document.getElementById("satietyDisplay");
+const marketModal = document.getElementById("marketModal");
+const buyModal = document.getElementById("buyModal");
+const sellModal = document.getElementById("sellModal");
+const sellConfirmationModal = document.getElementById("sellConfirmationModal");
+const shopGrid = document.getElementById("shopGrid");
+const sellGrid = document.getElementById("sellGrid");
+const craftingModal = document.getElementById("craftingModal");
+const recipeBookModal = document.getElementById("recipeBookModal");
+const characterSuit = document.getElementById("characterSuit");
+const characterHead = document.getElementById("characterHead");
+const reactionDialogue = document.getElementById("reactionDialogue");
+const introModal = document.getElementById("introModal");
+const introContent = document.getElementById("introContent");
+const optionsModal = document.getElementById("optionsModal");
+const languageSelect = document.getElementById("languageSelect");
 
 // --- LÓGICA DE INVENTARIO ---
 const inventoryGrid = document.getElementById("inventoryGrid");
 const inventorySlotsDisplay = document.getElementById("inventorySlots");
 const closeInventoryModalButton = document.getElementById("closeInventoryModal");
+
+// --- FUNCIÓN HELPER PARA i18n (NUEVA) ---
+function getText(key) {
+    const source = UI_TEXTS[key];
+    if (source && source[gameState.language]) {
+        return source[gameState.language];
+    }
+    // Fallback al inglés si la traducción no existe
+    return source ? source.en : key;
+}
+
+// --- LÓGICA DE INTRODUCCIÓN ---
+function runIntroScene() {
+    showModal(introModal);
+    let step = 0;
+    const steps = [
+        { text: { es: `Selecciona un lenguaje: `, en: `Select a language:` }, prompt: 'language' },
+        { text: { es: `Hola. Bienvenido a... bueno, a nuestro nuevo gremio, ${gameState.guildName}!`, en: `Uhm... hello. Welcome to... well, to our new guild, the "${gameState.guildName}"!` } },
+        { text: { es: "Soy Eleanora. Supongo que trabajaremos juntos.", en: "I'm Eleanora. I guess we'll be working together from now on." } },
+        { text: { es: "¿Cómo debería llamarte?", en: "By the way... I don't know your name yet. What should I call you?" }, prompt: 'playerName' },
+        { text: (name) => ({ es: `¿${name}? Es un buen nombre.`, en: `${name}? That's a nice name.` }) },
+        { text: { es: "Espero que nos llevemos bien.", en: "I hope we get along." } }
+    ];
+
+    const showNextStep = () => {
+        // La lógica para salir de la intro se mueve al principio para mayor claridad
+        if (step >= steps.length) {
+            gameState.hasCompletedIntro = true;
+            // Después de la intro, damos los objetos iniciales de una partida nueva
+            addItemToInventory("cheap_shirt", 1);
+            addItemToInventory("cheap_pants", 1);
+            hideModal(introModal);
+            initializeGame(); // Continuamos con la inicialización normal
+            return;
+        }
+
+        const currentStep = steps[step];
+        let stepText = currentStep.text;
+        if (typeof stepText === 'function') stepText = stepText(gameState.playerName);
+        
+        // El texto se genera primero, usando el idioma ya establecido (o el default 'en')
+        let contentHTML = `<p class="fade-in">${stepText[gameState.language]}</p>`;
+        
+        // --- SECCIÓN CLAVE DE LA CORRECCIÓN ---
+        // Generamos el HTML de los botones según el tipo de prompt
+        if (currentStep.prompt === 'language') {
+            contentHTML += `
+                <div class="my-4 flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <button class="lang-choice action-button !w-auto !px-6" data-lang="es">Español</button>
+                    <button class="lang-choice action-button !w-auto !px-6" data-lang="en">English</button>
+                </div>
+            `;
+        } else if (currentStep.prompt === 'playerName') {
+            contentHTML += `
+                <input type="text" id="nameInput" class="w-full max-w-sm p-2 rounded bg-amber-950 text-center my-4" placeholder="${getText('placeholder_name')}">
+                <button id="confirmNameButton" class="action-button !w-auto !px-6 mx-auto">${getText('confirm')}</button>
+            `;
+        } else {
+            // Para cualquier otro paso que no tenga prompt, se crea el botón "Siguiente"
+            contentHTML += `<button id="continueIntroButton" class="action-button !w-auto !px-6 mx-auto mt-6">${getText('next')}</button>`;
+        }
+        
+        introContent.innerHTML = contentHTML;
+        
+        // --- SECCIÓN CLAVE DE LOS LISTENERS ---
+        // Ahora, asignamos el listener SOLO al botón que sabemos que existe en este paso
+        if (currentStep.prompt === 'language') {
+            document.querySelectorAll('.lang-choice').forEach(button => {
+                button.onclick = (e) => {
+                    gameState.language = e.target.dataset.lang;
+                    step++;
+                    showNextStep();
+                };
+            });
+        } else if (currentStep.prompt === 'playerName') {
+            document.getElementById('confirmNameButton').onclick = () => {
+                const nameInput = document.getElementById('nameInput');
+                if (nameInput.value.trim() !== "") {
+                    gameState.playerName = nameInput.value.trim();
+                    step++;
+                    showNextStep();
+                }
+            };
+        } else {
+            document.getElementById('continueIntroButton').onclick = () => {
+                step++;
+                showNextStep();
+            };
+        }
+    };
+    showNextStep();
+}
+
+// --- LÓGICA DE CRAFTEO ---
+function openCraftingModal() {
+    craftingSlots = [null, null, null, null]; // Reseteamos las ranuras
+    renderCraftingUI();
+    showModal(craftingModal);
+}
+
+function renderCraftingUI() {
+    renderCraftingSlots();
+    renderCraftingMaterials();
+}
+
+function renderCraftingSlots() {
+    const grid = document.getElementById('craftingSlotsGrid');
+    grid.innerHTML = '';
+    for (let i = 0; i < 4; i++) {
+        const slotDiv = document.createElement('div');
+        slotDiv.className = 'inventory-item h-24 flex items-center justify-center';
+        if (craftingSlots[i]) {
+            const item = masterItemList[craftingSlots[i]];
+            slotDiv.innerHTML = `<img src="${item.path}" class="w-16 h-16" title="${item.name}">`;
+            slotDiv.onclick = () => removeFromCraftingSlot(i);
+        } else {
+            slotDiv.innerHTML = `<span class="text-gray-500 text-xs">Vacío</span>`;
+            slotDiv.onclick = null;
+        }
+        grid.appendChild(slotDiv);
+    }
+}
+
+function renderCraftingMaterials() {
+    const grid = document.getElementById('craftingMaterialsGrid');
+    grid.innerHTML = '';
+    const materialsInInventory = gameState.inventory.filter(item => masterItemList[item.id].type === 'material');
+    
+    if (materialsInInventory.length === 0) {
+        grid.innerHTML = `<p class="col-span-full text-center text-gray-400">No tienes materiales.</p>`;
+        return;
+    }
+
+    materialsInInventory.forEach(item => {
+        const itemData = masterItemList[item.id];
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'inventory-item text-center p-1 cursor-pointer';
+        itemDiv.innerHTML = `
+            <img src="${itemData.path}" class="w-12 h-12 mx-auto">
+            <p class="text-xs">${itemData.name} (x${item.quantity})</p>
+        `;
+        itemDiv.onclick = () => addToCraftingSlot(item.id);
+        grid.appendChild(itemDiv);
+    });
+}
+
+function addToCraftingSlot(itemId) {
+    const emptySlotIndex = craftingSlots.findIndex(slot => slot === null);
+    if (emptySlotIndex === -1) {
+        showNotification("Ranuras Llenas", "No hay más espacio en la mesa de trabajo.");
+        return;
+    }
+    
+    // Simulación simple: se añade uno a la ranura. Para una lógica real de cantidades se necesitaría más complejidad.
+    craftingSlots[emptySlotIndex] = itemId;
+    renderCraftingUI();
+}
+
+function removeFromCraftingSlot(slotIndex) {
+    craftingSlots[slotIndex] = null;
+    renderCraftingUI();
+}
+
+function attemptCraft() {
+    const ingredientsInSlots = craftingSlots.filter(s => s !== null).reduce((acc, id) => {
+        acc[id] = (acc[id] || 0) + 1;
+        return acc;
+    }, {});
+    
+    let craftedItem = null;
+    for (const recipeId in recipes) {
+        const recipe = recipes[recipeId];
+        const requiredIngredients = recipe.ingredients.reduce((acc, ing) => ({...acc, [ing.id]: ing.quantity }), {});
+
+        // Comprobamos si los ingredientes coinciden
+        const requiredKeys = Object.keys(requiredIngredients);
+        const providedKeys = Object.keys(ingredientsInSlots);
+        
+        if (requiredKeys.length === providedKeys.length && requiredKeys.every(key => requiredIngredients[key] === ingredientsInSlots[key])) {
+            craftedItem = recipe.result;
+            break;
+        }
+    }
+
+    if (craftedItem) {
+        // Quitar ingredientes del inventario
+        Object.entries(ingredientsInSlots).forEach(([itemId, quantity]) => {
+            const itemInInv = gameState.inventory.find(i => i.id === itemId);
+            itemInInv.quantity -= quantity;
+        });
+        gameState.inventory = gameState.inventory.filter(item => item.quantity > 0);
+
+        // Añadir resultado
+        addItemToInventory(craftedItem, 1);
+        showNotification("¡Éxito!", `Has creado ${masterItemList[craftedItem].name}.`);
+        
+        // Aprender la receta si no la sabíamos
+        if (!gameState.knownRecipes.includes(craftedItem.recipeId)) {
+            gameState.knownRecipes.push(craftedItem.recipeId);
+        }
+
+    } else {
+        showNotification("Fallo", "Los ingredientes no producen nada.");
+    }
+    
+    // Limpiar mesa de trabajo
+    craftingSlots = [null, null, null, null];
+    renderCraftingUI();
+    updateUI();
+}
 
 // --- LÓGICA DE RECUPERACIÓN DE ESTADÍSTICAS ---
 function startEnergyRecovery() {
@@ -147,11 +508,42 @@ function renderInventory() {
 function handleItemClick(itemId) {
     const itemData = masterItemList[itemId];
     const itemType = itemData.type;
-    if (gameState.equipped[itemType] === itemId) {
-        gameState.equipped[itemType] = null;
-    } else {
-        gameState.equipped[itemType] = itemId;
+
+    // Lógica para Consumibles y Recetas (como antes)
+    if (itemType === 'recipe') { /* ... */ return; }
+    if (itemType === 'consumable') { 
+        // TODO: Implementar lógica de consumibles
+        showNotification("Consumible", "Aún no se pueden usar objetos desde aquí.");
+        return;
     }
+
+    // NUEVA VALIDACIÓN DE AFINIDAD
+    if (itemData.requiredAffinity && gameState.affinity < itemData.requiredAffinity) {
+        showNotification("Afinidad Insuficiente", `Necesitas ${itemData.requiredAffinity} de afinidad para equipar esto.`);
+        return;
+    }
+
+    // Lógica de Equipamiento
+    if (['top', 'bottom', 'weapon', 'head', 'suit'].includes(itemType)) {
+        // Desequipar el objeto actual si se hace clic en él
+        if (gameState.equipped[itemType] === itemId) {
+            gameState.equipped[itemType] = null;
+        } else {
+            // Equipar el nuevo objeto
+            gameState.equipped[itemType] = itemId;
+
+            // LÓGICA DE TRAJES (SUIT)
+            if (itemType === 'suit') {
+                // Si equipamos un traje, desequipamos top y bottom
+                gameState.equipped.top = null;
+                gameState.equipped.bottom = null;
+            } else if (itemType === 'top' || itemType === 'bottom') {
+                // Si equipamos un top o bottom, desequipamos el traje
+                gameState.equipped.suit = null;
+            }
+        }
+    }
+    
     updateUI();
     renderInventory();
 }
@@ -171,12 +563,28 @@ function startBlinking() {
 }
 
 characterContainer.addEventListener("click", () => {
-    characterEyes.src = "./img/expressions/eyes_2.png";
-    characterMouth.src = "./img/expressions/mouth_2.png";
-    setTimeout(() => {
-        characterEyes.src = gameState.expression.eyes;
-        characterMouth.src = gameState.expression.mouth;
-    }, 800);
+    // Encontrar la reacción correcta según la afinidad
+    const currentReaction = affinityReactions
+        .slice() // Creamos una copia para no modificar el original
+        .reverse() // Empezamos desde la afinidad más alta
+        .find(reaction => gameState.affinity >= reaction.level);
+
+    if (currentReaction) {
+        // Mostrar diálogo de reacción
+        reactionDialogue.textContent = currentReaction.text;
+        reactionDialogue.classList.remove('opacity-0');
+
+        // Cambiar expresión
+        characterEyes.src = currentReaction.eyes;
+        characterMouth.src = currentReaction.mouth;
+
+        // Ocultar todo después de un tiempo
+        setTimeout(() => {
+            reactionDialogue.classList.add('opacity-0');
+            characterEyes.src = gameState.expression.eyes;
+            characterMouth.src = gameState.expression.mouth;
+        }, 1500); // Mantenemos la reacción por 1.5 segundos
+    }
 });
 
 // --- LÓGICA DE MISIONES (MODIFICADA) ---
@@ -217,74 +625,308 @@ function startMission() {
 }
 
 function calculateMissionRewards() {
-    const rand = Math.random() * 100;
-    let resultText = "¡Ha vuelto de la misión!<br>";
+    let resultTextKey = 'missionReturn'; // Clave para i18n
     let moneyEarned = 0;
     let itemsFoundIds = [];
-    const possibleItems = Object.keys(masterItemList);
-    if (rand < 30) {
-        resultText += "No encontró nada esta vez...";
-    } else if (rand < 50) {
-        moneyEarned = 10;
-    } else if (rand < 60) {
-        moneyEarned = 20;
-    } else if (rand < 65) {
-        moneyEarned = 100;
-    } else if (rand < 75) {
-        moneyEarned = 10;
-        itemsFoundIds.push(possibleItems[Math.floor(Math.random() * possibleItems.length)]);
-    } else if (rand < 85) {
-        moneyEarned = 20;
-        itemsFoundIds.push(possibleItems[Math.floor(Math.random() * possibleItems.length)]);
-    } else if (rand < 90) {
-        moneyEarned = 100;
-        itemsFoundIds.push(possibleItems[Math.floor(Math.random() * possibleItems.length)]);
-    } else {
-        itemsFoundIds.push(possibleItems[Math.floor(Math.random() * possibleItems.length)]);
-        itemsFoundIds.push(possibleItems[Math.floor(Math.random() * possibleItems.length)]);
+
+    // 1. Aplicar bonus de arma equipada
+    let weaponBonus = { nothingChance: 0, itemChance: 0 };
+    if (gameState.equipped.weapon) {
+        weaponBonus = masterItemList[gameState.equipped.weapon].effects.missionBonus;
     }
+
+    // 2. Calcular la probabilidad de no encontrar nada
+    // El bonus es negativo, así que weaponBonus.nothingChance será, por ejemplo, -0.25
+    // La fórmula se mantiene: 30 * (1 - 0.25) = 22.5
+    const nothingChance = 30 * (1 + weaponBonus.nothingChance); 
+    const rand = Math.random() * 100;
+
+    // 3. Usar SWITCH para determinar la recompensa base (dinero o nada)
+    switch (true) {
+        case (rand < nothingChance): // 0 a (30 - bonus)
+            resultTextKey = 'missionReturnNothing';
+            break;
+        case (rand < 50): // (30 - bonus) a 50
+            moneyEarned = 10;
+            break;
+        case (rand < 60): // 50 a 60
+            moneyEarned = 20;
+            break;
+        case (rand < 65): // 60 a 65
+            moneyEarned = 100;
+            break;
+        case (rand < 75): // 65 a 75
+            moneyEarned = 10;
+            // Se añade la posibilidad de loot extra más adelante
+            break;
+        case (rand < 85): // 75 a 85
+            moneyEarned = 20;
+            break;
+        case (rand < 90): // 85 a 90
+            moneyEarned = 100;
+            break;
+        default: // 90 a 100
+            // No se gana dinero base, pero sí hay posibilidad de objetos
+            break;
+    }
+
+    // 4. Calcular el loot adicional (materiales y recetas) si la misión no fue un fracaso total
+    if (rand >= nothingChance) {
+        // Posibilidad de encontrar materiales
+        Object.entries(missionLoot.materials).forEach(([materialId, chance]) => {
+            if (Math.random() < chance + weaponBonus.itemChance) {
+                itemsFoundIds.push(materialId);
+            }
+        });
+        // Posibilidad de encontrar recetas
+        Object.entries(missionLoot.recipes).forEach(([recipeId, chance]) => {
+            const recipeData = masterItemList[recipeId];
+            if (!gameState.knownRecipes.includes(recipeData.recipeId) && Math.random() < chance) {
+                itemsFoundIds.push(recipeId);
+                gameState.knownRecipes.push(recipeData.recipeId); // Aprender la receta
+                // Notificación específica para recetas aprendidas
+                showNotification(
+                    getText('recipeDiscoveredTitle'), 
+                    getText('recipeDiscoveredMsg')(getText(recipeId))
+                );
+            }
+        });
+    }
+
+    // 5. Construir el mensaje final de resultados (usando i18n)
+    let finalResultText = getText(resultTextKey) + '<br>';
+
     if (moneyEarned > 0) {
         gameState.money += moneyEarned;
-        resultText += `Ganancias: $${moneyEarned}<br>`;
+        finalResultText += `${getText('missionGains')}: $${moneyEarned}<br>`;
     }
+
     if (itemsFoundIds.length > 0) {
         const itemNames = [];
         itemsFoundIds.forEach((itemId) => {
             addItemToInventory(itemId, 1);
-            itemNames.push(masterItemList[itemId].name);
+            // Obtenemos el nombre traducido del objeto
+            itemNames.push(getText(itemId)); 
         });
-        resultText += `Objetos: ${itemNames.join(", ")}`;
+        finalResultText += `${getText('missionItems')}: ${itemNames.join(", ")}`;
     }
-    missionResult.innerHTML = resultText;
+
+    missionResult.innerHTML = finalResultText;
 }
 
 closeMissionModalButton.addEventListener("click", () => hideModal(missionModal));
 
+function renderShop() {
+    shopGrid.innerHTML = "";
+    shopInventory.forEach(itemId => {
+        const item = masterItemList[itemId];
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'inventory-item p-2 flex flex-col justify-between';
+        itemDiv.innerHTML = `
+            <div>
+                <img src="${item.path}" alt="${item.name}" class="w-16 h-16 mx-auto mb-2">
+                <p class="text-sm font-semibold">${item.name}</p>
+                <p class="text-xs text-amber-300">$${item.buyPrice}</p>
+            </div>
+            <button class="action-button !text-sm !py-1 mt-2" onclick="buyItem('${itemId}')">Comprar</button>
+        `;
+        shopGrid.appendChild(itemDiv);
+    });
+}
+
+function buyItem(itemId) {
+    const item = masterItemList[itemId];
+    if (gameState.money < item.buyPrice) {
+        showNotification("Fondos Insuficientes", "No tienes suficiente dinero para comprar esto.");
+        return;
+    }
+
+    // Comprobación de espacio en inventario
+    const existingItem = gameState.inventory.find(i => i.id === itemId);
+    if (!existingItem && gameState.inventory.length >= MAX_INVENTORY_SLOTS) {
+        showNotification("Inventario Lleno", "No tienes espacio para un nuevo tipo de objeto.");
+        return;
+    }
+    if (existingItem && existingItem.quantity >= MAX_STACK_SIZE) {
+        showNotification("Pila Llena", `Ya tienes el máximo de ${item.name}.`);
+        return;
+    }
+    
+    gameState.money -= item.buyPrice;
+    addItemToInventory(itemId, 1);
+    showNotification("Compra Exitosa", `¡Has comprado ${item.name}!`);
+    updateUI();
+}
+
+function renderSellableInventory() {
+    sellGrid.innerHTML = "";
+    if (gameState.inventory.length === 0) {
+        sellGrid.innerHTML = `<p class="col-span-full text-center text-gray-400">No tienes nada que vender.</p>`;
+        return;
+    }
+    gameState.inventory.forEach(item => {
+        const itemData = masterItemList[item.id];
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'inventory-item p-2 flex flex-col justify-between';
+        itemDiv.innerHTML = `
+            <div>
+                <img src="${itemData.path}" alt="${itemData.name}" class="w-16 h-16 mx-auto mb-2">
+                <p class="text-sm font-semibold">${itemData.name} (x${item.quantity})</p>
+                <p class="text-xs text-green-400">Vender por: $${itemData.sellPrice}</p>
+            </div>
+            <button class="action-button !text-sm !py-1 mt-2" onclick="openSellConfirmation('${item.id}')">Vender</button>
+        `;
+        sellGrid.appendChild(itemDiv);
+    });
+}
+
+function openSellConfirmation(itemId) {
+    const itemInInventory = gameState.inventory.find(i => i.id === itemId);
+    const itemData = masterItemList[itemId];
+    
+    document.getElementById('sellItemName').textContent = `Vender ${itemData.name}`;
+    const sellInput = document.getElementById('sellQuantityInput');
+    
+    let maxQuantity = itemInInventory.quantity;
+    // VALIDACIÓN PARA NO VENDER EQUIPO PUESTO
+    if (Object.values(gameState.equipped).includes(itemId)) {
+        maxQuantity--;
+    }
+
+    if (maxQuantity < 1) {
+        showNotification("No se puede vender", "No puedes vender la última unidad de un objeto que llevas equipado.");
+        return;
+    }
+
+    sellInput.max = maxQuantity;
+    sellInput.value = 1;
+
+    const confirmButton = document.getElementById('confirmSellButton');
+    confirmButton.onclick = () => confirmSell(itemId);
+
+    showModal(sellConfirmationModal);
+}
+
+function confirmSell(itemId) {
+    const quantityToSell = parseInt(document.getElementById('sellQuantityInput').value);
+    const itemInInventory = gameState.inventory.find(i => i.id === itemId);
+
+    if (isNaN(quantityToSell) || quantityToSell <= 0 || quantityToSell > itemInInventory.quantity) {
+        showNotification("Cantidad Inválida", "Por favor, introduce una cantidad válida para vender.");
+        return;
+    }
+
+    const itemData = masterItemList[itemId];
+    const moneyGained = quantityToSell * itemData.sellPrice;
+    
+    gameState.money += moneyGained;
+    itemInInventory.quantity -= quantityToSell;
+
+    // Si vendimos toda la pila, eliminamos el objeto del inventario
+    if (itemInInventory.quantity <= 0) {
+        gameState.inventory = gameState.inventory.filter(i => i.id !== itemId);
+    }
+    
+    showNotification("Venta Exitosa", `¡Has vendido ${quantityToSell}x ${itemData.name} por $${moneyGained}!`);
+    hideModal(sellConfirmationModal);
+    renderSellableInventory(); // Actualizamos la vista de venta
+    updateUI();
+}
+
 // --- FUNCIONES GENERALES Y UI ---
 function updateUI() {
-    // Estado
+    // ---- Actualizar Textos Fijos de la UI ----
+    // Menú lateral
+    document.querySelector('#menu-panel h2').textContent = getText('menuTitle');
+    document.querySelector('#openOptionsButton').textContent = getText('options');
+    document.querySelector('#saveButton').textContent = getText('save');
+    document.querySelector('a.menu-item:nth-of-type(3)').textContent = getText('gallery');
+    document.querySelector('a.menu-item:nth-of-type(4)').textContent = getText('exit');
+
+    // Botones de acción (Móvil)
+    document.querySelector('#talkButtonMobile span').textContent = getText('talk');
+    document.querySelector('#equipButtonMobile span').textContent = getText('equip');
+    document.querySelector('#interactButtonMobile span').textContent = getText('interact');
+    document.querySelector('#missionButtonMobile span').textContent = getText('mission');
+    document.querySelector('#marketButtonMobile span').textContent = getText('market');
+    document.querySelector('#craftingButtonMobile span').textContent = getText('craft');
+
+    // Botones de acción (Escritorio) - Extraemos el texto del SVG
+    document.getElementById('talkButtonDesktop').lastChild.textContent = ' ' + getText('talk');
+    document.getElementById('equipButtonDesktop').lastChild.textContent = ' ' + getText('equip');
+    document.getElementById('interactButtonDesktop').lastChild.textContent = ' ' + getText('interact');
+    document.getElementById('missionButtonDesktop').lastChild.textContent = ' ' + getText('mission');
+    document.getElementById('marketButtonDesktop').lastChild.textContent = ' ' + getText('market');
+    document.getElementById('craftingButtonDesktop').lastChild.textContent = ' ' + getText('craft');
+
+    // Títulos de modales y botones
+    document.querySelector('#optionsModal h3').textContent = getText('optionsTitle');
+    document.querySelector('#optionsModal label').textContent = getText('language');
+    document.querySelector('#closeOptionsModal').textContent = getText('close');
+    document.querySelector('#inventoryModal h3').textContent = `${getText('inventoryTitle')} (${gameState.inventory.length}/20)`;
+    document.querySelector('#closeInventoryModal').textContent = getText('close');
+    document.querySelector('#marketModal h3').textContent = getText('marketTitle');
+    document.querySelector('#marketModal p').textContent = getText('marketPrompt');
+    document.querySelector('#openBuyModalButton').textContent = getText('buy');
+    document.querySelector('#openSellModalButton').textContent = getText('sell');
+    document.querySelector('#closeMarketModal').textContent = getText('close');
+    document.querySelector('#buyModal h3').textContent = getText('buyTitle');
+    document.querySelector('#closeBuyModal').textContent = getText('back');
+    document.querySelector('#sellModal h3').textContent = getText('sellTitle');
+    document.querySelector('#closeSellModal').textContent = getText('back');
+    document.querySelector('#sellConfirmationModal h3').textContent = getText('sellConfirmTitle');
+    document.querySelector('#sellConfirmationModal p').textContent = getText('sellConfirmPrompt');
+    document.querySelector('#confirmSellButton').textContent = getText('confirmSell');
+    document.querySelector('#cancelSellButton').textContent = getText('cancel');
+    document.querySelector('#interactModal h3').textContent = getText('interactTitle');
+    document.querySelector('#feedButton').textContent = getText('feed');
+    document.querySelector('#playMinigameButton').textContent = getText('playMinigame');
+    document.querySelector('#closeInteractModal').textContent = getText('close');
+    document.querySelector('#notificationModal #closeNotificationModal').textContent = getText('understood');
+    document.querySelector('#craftingModal h3').textContent = getText('craftingTitle');
+    document.querySelector('#craftingModal .flex-1:first-child h4').textContent = getText('craftingSlots');
+    document.querySelector('#craftingModal .flex-1:last-child h4').textContent = getText('availableMaterials');
+    document.querySelector('#attemptCraftButton').textContent = getText('craftItem');
+    document.querySelector('#closeCraftingModal').textContent = getText('close');
+    
+    // ---- Actualizar Stats ----
+    affinityDisplay.parentElement.querySelector('.font-semibold').textContent = `${getText('affinity')}: `;
+    moneyDisplay.parentElement.querySelector('.font-semibold').textContent = `${getText('money')}: $`;
+    energyDisplay.parentElement.querySelector('.font-semibold').textContent = `${getText('energy')}: ⚡`;
+    satietyDisplay.parentElement.querySelector('.font-semibold').textContent = `${getText('satiety')}: 🧡`;
     affinityDisplay.textContent = gameState.affinity;
     moneyDisplay.textContent = gameState.money;
     energyDisplay.textContent = Math.floor(gameState.energy);
     satietyDisplay.textContent = Math.floor(gameState.satiety);
 
     // --- Personaje ---
-    // Top (Camisa)
-    if (gameState.equipped.top) {
-        characterTop.src = masterItemList[gameState.equipped.top].path;
-        characterTop.classList.remove('hidden-item'); // Muestra la capa
+    // Traje (Suit) - Se renderiza primero para estar debajo de cabeza/arma
+    if (gameState.equipped.suit) {
+        characterSuit.src = masterItemList[gameState.equipped.suit].path;
+        characterSuit.classList.remove('hidden-item');
     } else {
-        characterTop.classList.add('hidden-item'); // Oculta la capa
-        characterTop.src = ''; // Opcional: limpiar el src para estar seguros
+        characterSuit.classList.add('hidden-item');
     }
 
-    // Bottom (Pantalones)
-    if (gameState.equipped.bottom) {
-        characterBottom.src = masterItemList[gameState.equipped.bottom].path;
-        characterBottom.classList.remove('hidden-item'); // Muestra la capa
+    // Top y Bottom solo se muestran si no hay un traje equipado
+    if (gameState.equipped.top && !gameState.equipped.suit) {
+        characterTop.src = masterItemList[gameState.equipped.top].path;
+        characterTop.classList.remove('hidden-item');
     } else {
-        characterBottom.classList.add('hidden-item'); // Oculta la capa
-        characterBottom.src = ''; // Opcional: limpiar el src
+        characterTop.classList.add('hidden-item');
+    }
+    if (gameState.equipped.bottom && !gameState.equipped.suit) {
+        characterBottom.src = masterItemList[gameState.equipped.bottom].path;
+        characterBottom.classList.remove('hidden-item');
+    } else {
+        characterBottom.classList.add('hidden-item');
+    }
+
+    if (gameState.equipped.head) {
+        characterHead.src = masterItemList[gameState.equipped.head].path;
+        characterHead.classList.remove('hidden-item');
+    } else {
+        characterHead.classList.add('hidden-item');
     }
 
     // Expresiones
@@ -334,14 +976,16 @@ function showNotification(title, message) {
 closeNotificationModalButton.addEventListener("click", () => hideModal(notificationModal));
 
 // --- LÓGICA DE DIÁLOGO ---
-// <-- CORRECCIÓN: Se ha añadido toda la lógica de diálogo del script antiguo.
 const dialogueText = document.getElementById("dialogueText");
 const dialogueOptionsContainer = document.getElementById("dialogueOptions");
 const characterNameElement = document.getElementById("characterName");
 
 const dialogues = [{
     character: "Eleanora",
-    text: "¿Cómo crees que me fue en el entrenamiento de hoy?",
+    text: () => ({
+        es: `¿Cómo crees que me fue hoy en el entrenamiento, ${getPlayerNickname()}?`,
+        en: `How do you think I did in training today, ${getPlayerNickname()}?`
+    }),
     options: [
         { text: "¡Seguro que genial! Eres muy fuerte.", affinityChange: 10 },
         { text: "Espero que bien, debes esforzarte más.", affinityChange: -5 },
@@ -350,7 +994,7 @@ const dialogues = [{
     ],
 }, {
     character: "Eleanora",
-    text: "A veces me pregunto si todo este esfuerzo vale la pena...",
+    text: () => `A veces me pregunto si todo este esfuerzo vale la pena, ${getPlayerNickname()}...`,
     options: [
         { text: "¡Claro que sí! Estás protegiendo a muchos.", affinityChange: 15 },
         { text: "Si tienes dudas, quizás deberías reconsiderarlo.", affinityChange: -10 },
@@ -359,14 +1003,27 @@ const dialogues = [{
     ],
 }, ];
 
+// NUEVA FUNCIÓN para obtener el apodo según la afinidad
+function getPlayerNickname() {
+    const nicknames = {
+        es: { high: gameState.playerName, mid: "colegui", low: "jefe" },
+        en: { high: gameState.playerName, mid: "partner", low: "boss" }
+    };
+    const langNicks = nicknames[gameState.language];
+    if (gameState.affinity >= 90) return langNicks.high;
+    if (gameState.affinity >= 40) return langNicks.mid;
+    return langNicks.low;
+}
+
 function startDialogue() {
     const currentDialogue = dialogues[Math.floor(Math.random() * dialogues.length)];
     characterNameElement.textContent = currentDialogue.character || gameState.characterName;
-    dialogueText.textContent = currentDialogue.text;
+    const dialogueTextContent = typeof currentDialogue.text === 'function' ? currentDialogue.text() : currentDialogue.text;
+    dialogueText.textContent = dialogueTextContent[gameState.language];
     dialogueOptionsContainer.innerHTML = "";
     currentDialogue.options.forEach((option) => {
         const button = document.createElement("button");
-        button.textContent = option.text;
+        button.textContent = option.text[gameState.language];
         button.className = "dialogue-option-button";
         button.onclick = () => {
             gameState.affinity += option.affinityChange;
@@ -426,7 +1083,7 @@ feedButton.addEventListener("click", () => {
     }
 
     // Gana saciedad (se llena)
-    gameState.satiety += FEED_SATIETY_GAIN;
+    gameState.satiety += FEED_ENERGY_GAIN;
     if (gameState.satiety > 100) gameState.satiety = 100;
     
     // Gana energía
@@ -469,30 +1126,70 @@ document.getElementById("equipButtonMobile").addEventListener("click", () => {
 });
 document.getElementById("interactButtonMobile").addEventListener("click", () => showModal(interactModal));
 document.getElementById("missionButtonMobile").addEventListener("click", startMission);
-
-// <-- NUEVO: Event listener para el botón de guardar
+document.getElementById("marketButtonDesktop").addEventListener("click", () => showModal(marketModal));
+document.getElementById("marketButtonMobile").addEventListener("click", () => showModal(marketModal));
+document.getElementById('closeMarketModal').addEventListener('click', () => hideModal(marketModal));
+document.getElementById('openBuyModalButton').addEventListener('click', () => { hideModal(marketModal); renderShop(); showModal(buyModal); });
+document.getElementById('openSellModalButton').addEventListener('click', () => { hideModal(marketModal); renderSellableInventory(); showModal(sellModal); });
+document.getElementById('closeBuyModal').addEventListener('click', () => { hideModal(buyModal); showModal(marketModal); });
+document.getElementById('closeSellModal').addEventListener('click', () => { hideModal(sellModal); showModal(marketModal); });
+document.getElementById('cancelSellButton').addEventListener('click', () => hideModal(sellConfirmationModal));
+document.getElementById('craftingButtonDesktop').addEventListener('click', openCraftingModal);
+document.getElementById('craftingButtonMobile').addEventListener('click', openCraftingModal);
+document.getElementById('closeCraftingModal').addEventListener('click', () => hideModal(craftingModal));
+document.getElementById('attemptCraftButton').addEventListener('click', attemptCraft);
+document.getElementById('openOptionsButton').addEventListener('click', () => {
+    languageSelect.value = gameState.language;
+    showModal(optionsModal);
+});
+document.getElementById('closeOptionsModal').addEventListener('click', () => hideModal(optionsModal));
+languageSelect.addEventListener('change', (e) => {
+    gameState.language = e.target.value;
+    updateUI(); // Actualizamos toda la UI para reflejar el cambio de idioma
+    showNotification("Idioma Cambiado", "El idioma se ha actualizado.");
+});
+// <-- Event listener para el botón de guardar
 saveButton.addEventListener('click', (e) => {
     e.preventDefault(); // Prevenimos que el link '#' nos lleve al tope de la página
     saveGame();
 });
 
 // --- INICIO DEL JUEGO ---
-// <-- NUEVO: Función principal que se ejecuta al cargar la página
+// <-- Función principal que se ejecuta al cargar la página
+function startNewGame() {
+    console.log("Iniciando una nueva partida.");
+    addItemToInventory("cheap_shirt", 1);
+    addItemToInventory("cheap_pants", 1);
+}
+
 function initializeGame() {
     if (loadGame()) {
-        // Si loadGame() devuelve true, es que se cargó una partida
         showNotification("¡Bienvenida de nuevo!", "Tu partida ha sido cargada.");
         if (gameState.energy < 100) startEnergyRecovery();
         if (gameState.satiety > 0) startSatietyDecay();
+        saveButton.classList.remove('disabled-link');
+        updateUI();
+    } else {
+        // Si no hay partida guardada, no hacemos nada aquí.
+        // La intro se encargará de todo.
+        saveButton.classList.remove('disabled-link');
     }
-    
-    // Una vez que el juego ha empezado (sea nuevo o cargado), habilitamos el botón de guardar
-    saveButton.classList.remove('disabled-link');
-    
-    // Actualizamos la UI con el estado final (nuevo o cargado)
-    updateUI();
-    // startBlinking(); // La animación de parpadeo, si la quieres reactivar
 }
 
-// Ejecutamos la función de inicialización al cargar el script
-initializeGame();
+// PUNTO DE ENTRADA PRINCIPAL
+document.addEventListener('DOMContentLoaded', () => {
+    const savedData = localStorage.getItem(SAVE_KEY);
+    if (savedData) {
+        const savedState = JSON.parse(savedData);
+        if (savedState.hasCompletedIntro) {
+            // Si ya completó la intro, inicializamos el juego normalmente
+            initializeGame();
+        } else {
+            // Caso raro: guardó a mitad de la intro. La reiniciamos.
+            runIntroScene();
+        }
+    } else {
+        // No hay datos guardados, es la primera vez que juega.
+        runIntroScene();
+    }
+});
