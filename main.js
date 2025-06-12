@@ -987,19 +987,34 @@ const dialogues = [{
         en: `How do you think I did in training today, ${getPlayerNickname()}?`
     }),
     options: [
-        { text: "¡Seguro que genial! Eres muy fuerte.", affinityChange: 10 },
-        { text: "Espero que bien, debes esforzarte más.", affinityChange: -5 },
-        { text: "No lo sé, cuéntame más.", affinityChange: 2 },
-        { text: "El entrenamiento es clave, ¡sigue así!", affinityChange: 3 },
+        { text: { es: "¡Seguro que genial! Eres muy fuerte.", en: "I'm sure you were great! You're so strong." }, affinityChange: 10 },
+        { text: { es: "Espero que bien, debes esforzarte más.", en: "Hopefully well. You need to push yourself harder." }, affinityChange: -5 },
+        { text: { es: "No lo sé, cuéntame más.", en: "I don't know, tell me more." }, affinityChange: 2 },
+        { text: { es: "El entrenamiento es clave, ¡sigue así!", en: "Training is key, keep it up!" }, affinityChange: 3 },
     ],
 }, {
     character: "Eleanora",
-    text: () => `A veces me pregunto si todo este esfuerzo vale la pena, ${getPlayerNickname()}...`,
+    text: () => ({
+        es: `A veces me pregunto si todo este esfuerzo vale la pena, ${getPlayerNickname()}...`,
+        en: `Sometimes I wonder if all this effort is worth it, ${getPlayerNickname()}...`
+    }),
     options: [
-        { text: "¡Claro que sí! Estás protegiendo a muchos.", affinityChange: 15 },
-        { text: "Si tienes dudas, quizás deberías reconsiderarlo.", affinityChange: -10 },
-        { text: "Todos tenemos dudas, es normal.", affinityChange: 5 },
-        { text: "Tu esfuerzo inspira a otros.", affinityChange: 7 },
+        { text: { es: "¡Claro que sí! Estás protegiendo a muchos.", en: "Of course, it is! You're protecting so many people." }, affinityChange: 15 },
+        { text: { es: "Si tienes dudas, quizás deberías reconsiderarlo.", en: "If you have doubts, maybe you should reconsider." }, affinityChange: -10 },
+        { text: { es: "Todos tenemos dudas, es normal.", en: "Everyone has doubts, it's normal." }, affinityChange: 5 },
+        { text: { es: "Tu esfuerzo inspira a otros.", en: "Your effort inspires others." }, affinityChange: 7 },
+    ],
+}, {
+    character: "Eleanora",
+    text: () => ({
+        es: `Me gustaría tomar un descanso, ¿qué sugieres, ${getPlayerNickname()}?`,
+        en: `I'd like to take a break. What do you suggest, ${getPlayerNickname()}?`
+    }),
+    options: [
+        { text: { es: "Ver una película juntos.", en: "Let's watch a movie together." }, affinityChange: 8 },
+        { text: { es: "Leer un buen libro.", en: "How about reading a good book?" }, affinityChange: 3 },
+        { text: { es: "El deber llama. No hay tiempo.", en: "Duty calls. There's no time." }, affinityChange: -7 },
+        { text: { es: "Podríamos dar un paseo.", en: "We could go for a walk." }, affinityChange: 5 },
     ],
 }, ];
 
@@ -1190,6 +1205,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     } else {
         // No hay datos guardados, es la primera vez que juega.
+        localStorage.removeItem(SAVE_KEY);
         runIntroScene();
     }
 });
