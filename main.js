@@ -843,21 +843,13 @@ function updateUI() {
     document.querySelector('a.menu-item:nth-of-type(3)').textContent = getText('gallery');
     document.querySelector('a.menu-item:nth-of-type(4)').textContent = getText('exit');
 
-    // Botones de acción (Móvil)
-    document.querySelector('#talkButtonMobile span').textContent = getText('talk');
-    document.querySelector('#equipButtonMobile span').textContent = getText('equip');
-    document.querySelector('#interactButtonMobile span').textContent = getText('interact');
-    document.querySelector('#missionButtonMobile span').textContent = getText('mission');
-    document.querySelector('#marketButtonMobile span').textContent = getText('market');
-    document.querySelector('#craftingButtonMobile span').textContent = getText('craft');
-
     // Botones de acción (Escritorio) - Extraemos el texto del SVG
-    document.getElementById('talkButtonDesktop').lastChild.textContent = ' ' + getText('talk');
-    document.getElementById('equipButtonDesktop').lastChild.textContent = ' ' + getText('equip');
-    document.getElementById('interactButtonDesktop').lastChild.textContent = ' ' + getText('interact');
-    document.getElementById('missionButtonDesktop').lastChild.textContent = ' ' + getText('mission');
-    document.getElementById('marketButtonDesktop').lastChild.textContent = ' ' + getText('market');
-    document.getElementById('craftingButtonDesktop').lastChild.textContent = ' ' + getText('craft');
+    document.getElementById('talkButton').lastChild.textContent = ' ' + getText('talk');
+    document.getElementById('equipButton').lastChild.textContent = ' ' + getText('equip');
+    document.getElementById('interactButton').lastChild.textContent = ' ' + getText('interact');
+    document.getElementById('missionButton').lastChild.textContent = ' ' + getText('mission');
+    document.getElementById('marketButton').lastChild.textContent = ' ' + getText('market');
+    document.getElementById('craftingButton').lastChild.textContent = ' ' + getText('craft');
 
     // Títulos de modales y botones
     document.querySelector('#optionsModal h3').textContent = getText('optionsTitle');
