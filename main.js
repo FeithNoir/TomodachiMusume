@@ -84,9 +84,10 @@ const UI_TEXTS = {
 const masterItemList = {
     // Equipamiento
     'cheap_shirt': { name: { es: 'Camisa Barata', en: 'Cheap Shirt' }, type: 'top', path: './img/tops/cheapShirt.png', buyPrice: 50, sellPrice: 15 },
+    'good_shirt': { name: { es: 'Camisa Buena', en: 'Good Shirt' }, type: 'top', path: './img/tops/goodShirt.png', buyPrice: 75, sellPrice: 30 },
     'cheap_pants': { name: { es: 'Pantalones Baratos', en: 'Cheap Pants' }, type: 'bottom', path: './img/bottoms/cheapPants.png', buyPrice: 50, sellPrice: 15 },
+    'good_pants': { name: { es: 'Pantalones Buenos', en: 'Good Pants' }, type: 'bottom', path: './img/bottoms/goodPants.png', buyPrice: 75, sellPrice: 30 },
     'bunny_suit': { name: { es: 'Traje de Conejita', en: 'Bunny Suit' }, type: 'suit', path: './img/suits/bunny_suit.png', buyPrice: 2000, sellPrice: 500, requiredAffinity: 60 },
-    'ribbon_bow': { name: { es: 'Lazo Rojo', en: 'Red Ribbon' }, type: 'head', path: './img/head/ribbon_bow.png', buyPrice: 150, sellPrice: 40 },
     'wooden_sword': { name: { es: 'Espada de Madera', en: 'Wooden Sword' }, type: 'weapon', path: './img/items/sword_wood.png', buyPrice: 100, sellPrice: 25, effects: { missionBonus: { nothingChance: -0.05, itemChance: 0.05 } } },
     'iron_sword': { name: { es: 'Espada de Hierro', en: 'Iron Sword' }, type: 'weapon', path: './img/items/sword_iron.png', buyPrice: 500, sellPrice: 125, effects: { missionBonus: { nothingChance: -0.15, itemChance: 0.15 } } },
     'steel_sword': { name: { es: 'Espada de Acero', en: 'Steel Sword' }, type: 'weapon', path: './img/items/sword_steel.png', buyPrice: 0, sellPrice: 400, effects: { missionBonus: { nothingChance: -0.25, itemChance: 0.25 } } },
@@ -108,15 +109,22 @@ const recipes = {
     'steel_sword_recipe': {
         result: 'steel_sword',
         ingredients: [
-            { id: 'steel_ingot', quantity: 5 },
-            { id: 'wood_plank', quantity: 2 },
+            { id: 'steel_ingot', quantity: 3 },
+            { id: 'wood_plank', quantity: 1 },
+        ]
+    },
+    'wood_sword_recipe': {
+        result: 'wood_sword',
+        ingredients: [
+            { id: 'wood_plank', quantity: 3 },
+            { id: 'steel_ingot', quantity: 1 },
         ]
     },
     // Aquí se podrían añadir más recetas...
 };
 
 // --- BASE DE DATOS DE LA TIENDA ---
-const shopInventory = [ 'cheap_shirt', 'cheap_pants', 'wooden_sword', 'iron_sword', 'energy_drink', 'wood_plank', 'iron_ore', 'recipe_steel_sword', 'bunny_suit', 'ribbon_bow' ];
+const shopInventory = [ 'cheap_shirt', 'cheap_pants', 'wooden_sword', 'iron_sword', 'energy_drink', 'wood_plank', 'iron_ore', 'recipe_steel_sword', 'bunny_suit', 'good_pants', 'good_shirt' ];
 
 // --- REACCIONES POR AFINIDAD ---
 const affinityReactions = [
@@ -326,7 +334,7 @@ function renderCraftingSlots() {
         slotDiv.className = 'inventory-item h-24 flex items-center justify-center';
         if (craftingSlots[i]) {
             const item = masterItemList[craftingSlots[i]];
-            slotDiv.innerHTML = `<img src="${item.path}" class="w-16 h-16" title="${item.name}">`;
+            slotDiv.innerHTML = `<img src="${item.path}" class="w-16 h-16" title="${item.name[gameState.language] || itemData.name['en']}">`;
             slotDiv.onclick = () => removeFromCraftingSlot(i);
         } else {
             slotDiv.innerHTML = `<span class="text-gray-500 text-xs">Vacío</span>`;
@@ -492,12 +500,16 @@ function renderInventory() {
         const itemData = masterItemList[item.id];
         const itemDiv = document.createElement("div");
         itemDiv.className = "inventory-item";
-        const isEquipped = gameState.equipped[itemData.type] === item.id;
+        const isEquipped = Object.values(gameState.equipped).includes(item.id); // Corregido para que funcione con todos los tipos de equipo
         if (isEquipped) {
             itemDiv.classList.add("equipped");
         }
+
+        // --- CORRECCIÓN AQUÍ ---
+        const itemName = itemData.name[gameState.language] || itemData.name['en'];
+        
         itemDiv.innerHTML = `
-            <img src="${itemData.path}" alt="${itemData.name}" class="w-full h-auto object-contain">
+            <img src="${itemData.path}" alt="${itemName}" class="w-full h-auto object-contain" title="${itemName}">
             <span class="item-quantity">${item.quantity}</span>
         `;
         itemDiv.onclick = () => handleItemClick(item.id, index);
@@ -735,10 +747,11 @@ function renderShop() {
         const item = masterItemList[itemId];
         const itemDiv = document.createElement('div');
         itemDiv.className = 'inventory-item p-2 flex flex-col justify-between';
+        
         itemDiv.innerHTML = `
             <div>
-                <img src="${item.path}" alt="${item.name}" class="w-16 h-16 mx-auto mb-2">
-                <p class="text-sm font-semibold">${item.name}</p>
+                <img src="${item.path}" alt="${item.name[gameState.language] || itemData.name['en']}" class="w-16 h-16 mx-auto mb-2">
+                <p class="text-sm font-semibold">${item.name[gameState.language]}</p>
                 <p class="text-xs text-amber-300">$${item.buyPrice}</p>
             </div>
             <button class="action-button !text-sm !py-1 mt-2" onclick="buyItem('${itemId}')">Comprar</button>
@@ -761,13 +774,13 @@ function buyItem(itemId) {
         return;
     }
     if (existingItem && existingItem.quantity >= MAX_STACK_SIZE) {
-        showNotification("Pila Llena", `Ya tienes el máximo de ${item.name}.`);
+        showNotification("Pila Llena", `Ya tienes el máximo de ${item.name[gameState.language] || itemData.name['en']}.`);
         return;
     }
     
     gameState.money -= item.buyPrice;
     addItemToInventory(itemId, 1);
-    showNotification("Compra Exitosa", `¡Has comprado ${item.name}!`);
+    showNotification("Compra Exitosa", `¡Has comprado ${item.name[gameState.language] || itemData.name['en']}!`);
     updateUI();
 }
 
@@ -1132,7 +1145,7 @@ closeInteractModalButton.addEventListener("click", () => hideModal(interactModal
 
 // --- INICIALIZACIÓN Y EVENTOS ---
 document.getElementById("talkButton").addEventListener("click", startDialogue);
-document.getElementById("equipButton").addEventListener("click", () => { renderInventory(); });
+document.getElementById("equipButton").addEventListener("click", () => { renderInventory(); showModal(inventoryModal); });
 document.getElementById("interactButton").addEventListener("click", () => showModal(interactModal));
 document.getElementById("missionButton").addEventListener("click", startMission);
 document.getElementById("marketButton").addEventListener("click", () => showModal(marketModal));
