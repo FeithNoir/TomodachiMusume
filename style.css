@@ -134,6 +134,7 @@ body {
   color: white;
   padding: 0.5rem;
   border-radius: 0.5rem;
+  font-size: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -169,6 +170,7 @@ body {
 
   .action-button {
     padding: 0.75rem;
+    font-size: 1rem;
     width: 100%; /* Vuelve a ocupar todo el ancho en la vista de escritorio */
     flex-grow: 0; /* Desactivamos el crecimiento flexible */
     margin: 0; /* Quitamos el margen horizontal */

@@ -85,9 +85,14 @@ const masterItemList = {
     // Equipamiento
     'cheap_shirt': { name: { es: 'Camisa Barata', en: 'Cheap Shirt' }, type: 'top', path: './img/tops/cheapShirt.png', buyPrice: 50, sellPrice: 15 },
     'good_shirt': { name: { es: 'Camisa Buena', en: 'Good Shirt' }, type: 'top', path: './img/tops/goodShirt.png', buyPrice: 75, sellPrice: 30 },
+    'leather_shirt': { name: { es: 'Camisa de Cuero', en: 'Leather Shirt' }, type: 'top', path: './img/tops//leatherShirt.png', buyPrice: 15, sellPrice: 80 },
     'cheap_pants': { name: { es: 'Pantalones Baratos', en: 'Cheap Pants' }, type: 'bottom', path: './img/bottoms/cheapPants.png', buyPrice: 50, sellPrice: 15 },
     'good_pants': { name: { es: 'Pantalones Buenos', en: 'Good Pants' }, type: 'bottom', path: './img/bottoms/goodPants.png', buyPrice: 75, sellPrice: 30 },
+    'leather_skirt': { name: { es: 'Falda de Cuero', en: 'Leather Skirt' }, type: 'bottom', path: './img/bottoms/leatherSkirt.png', buyPrice: 15, sellPrice: 30 },
     'bunny_suit': { name: { es: 'Traje de Conejita', en: 'Bunny Suit' }, type: 'suit', path: './img/suits/bunny_suit.png', buyPrice: 2000, sellPrice: 500, requiredAffinity: 60 },
+    'bunny_ears': { name: { es: 'Traje de Conejita', en: 'Bunny Suit' }, type: 'suit', path: './img/head/bunny_ears.png', buyPrice: 500, sellPrice: 500, requiredAffinity: 60 },
+    'leather_stokckings': { name: { es: 'Medias de Cuero', en: 'Leather Stockings' }, type: 'stockings', path: './img/stockings/leatherStocks.png', buyPrice: 100, sellPrice: 500, requiredAffinity: 60 },
+    'bunny_stokckings': { name: { es: 'Medias de Conejita', en: 'Bunny Stockings' }, type: 'stockings', path: './img/stockings/bunny_stocks.png', buyPrice: 20, sellPrice: 500, requiredAffinity: 60 },
     'wooden_sword': { name: { es: 'Espada de Madera', en: 'Wooden Sword' }, type: 'weapon', path: './img/items/sword_wood.png', buyPrice: 100, sellPrice: 25, effects: { missionBonus: { nothingChance: -0.05, itemChance: 0.05 } } },
     'iron_sword': { name: { es: 'Espada de Hierro', en: 'Iron Sword' }, type: 'weapon', path: './img/items/sword_iron.png', buyPrice: 500, sellPrice: 125, effects: { missionBonus: { nothingChance: -0.15, itemChance: 0.15 } } },
     'steel_sword': { name: { es: 'Espada de Acero', en: 'Steel Sword' }, type: 'weapon', path: './img/items/sword_steel.png', buyPrice: 0, sellPrice: 400, effects: { missionBonus: { nothingChance: -0.25, itemChance: 0.25 } } },
@@ -124,7 +129,7 @@ const recipes = {
 };
 
 // --- BASE DE DATOS DE LA TIENDA ---
-const shopInventory = [ 'cheap_shirt', 'cheap_pants', 'wooden_sword', 'iron_sword', 'energy_drink', 'wood_plank', 'iron_ore', 'recipe_steel_sword', 'bunny_suit', 'good_pants', 'good_shirt' ];
+const shopInventory = [ 'cheap_shirt', 'cheap_pants', 'wooden_sword', 'iron_sword', 'energy_drink', 'wood_plank', 'iron_ore', 'recipe_steel_sword', 'bunny_suit', 'bunny_ears', 'bunny_stokckings', 'good_pants', 'good_shirt', 'leather_shirt', 'leather_skirt', 'leather_stokckings' ];
 
 // --- REACCIONES POR AFINIDAD ---
 const affinityReactions = [
@@ -156,6 +161,7 @@ const gameState = {
         bottom: null,
         suit: null,
         head: null,
+        stockings: null,
         weapon: null,
     },
     knownRecipes: [],
@@ -189,6 +195,7 @@ const characterBottom = document.getElementById("characterBottom");
 const characterTop = document.getElementById("characterTop");
 const characterEyes = document.getElementById("characterEyes");
 const characterMouth = document.getElementById("characterMouth");
+const characterStockings = document.getElementById("characterStockings");
 
 const affinityDisplay = document.getElementById("affinityDisplay");
 const moneyDisplay = document.getElementById("moneyDisplay");
@@ -945,6 +952,13 @@ function updateUI() {
         characterHead.classList.remove('hidden-item');
     } else {
         characterHead.classList.add('hidden-item');
+    }
+
+    if (gameState.equipped.stockings) {
+        characterStockings.src = masterItemList[gameState.equipped.stockings].path;
+        characterStockings.classList.remove('hidden-item');
+    } else {
+        characterStockings.classList.add('hidden-item');
     }
 
     // Expresiones
