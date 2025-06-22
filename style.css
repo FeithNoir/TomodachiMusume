@@ -134,7 +134,6 @@ body {
   color: white;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  font-size: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,6 +141,10 @@ body {
   /* Ajustamos el ancho para que sea flexible */
   flex-grow: 1; /* Para que ocupen el espacio en la barra móvil */
   margin: 0 0.25rem; /* Pequeño espacio entre botones en móvil */
+}
+
+#actionsMenu .action-button {
+  font-size: 0;
 }
 
 .action-button:hover {
@@ -184,6 +187,10 @@ body {
     width: 100%; /* Vuelve a ocupar todo el ancho en la vista de escritorio */
     flex-grow: 0; /* Desactivamos el crecimiento flexible */
     margin: 0; /* Quitamos el margen horizontal */
+  }
+
+  #actionsMenu .action-button {
+    font-size: 1rem;
   }
 
   .character-layer {
