@@ -70,6 +70,18 @@ const UI_TEXTS = {
     craftSuccessMsg: { es: (name) => ({ es: `Has creado ${name}.`, en: `You crafted ${name}.` }) },
     craftFail: { es: "Fallo", en: "Failure" },
     craftFailMsg: { es: "Los ingredientes no producen nada.", en: "The ingredients don't produce anything." },
+    saveSuccessTitle: { es: "Progreso Guardado", en: "Progress Saved" },
+    saveSuccessMsg: { es: "¡Tu partida se ha guardado correctamente!", en: "Your game has been saved successfully!" },
+    saveErrorTitle: { es: "Error al Guardar", en: "Save Error" },
+    saveErrorMsg: { es: "No se pudo guardar la partida. El almacenamiento podría estar lleno.", en: "Could not save the game. Storage might be full." },
+    saveVersionMismatchTitle: { es: "Partida Incompatible", en: "Incompatible Save" },
+    saveVersionMismatchMsg: { es: "Tu partida guardada es de una versión anterior y ha sido eliminada para evitar errores. Se iniciará un nuevo juego.", en: "Your saved game is from an older version and has been deleted to prevent errors. A new game will be started." },
+    welcomeBack: { es: "¡Bienvenida de nuevo!", en: "Welcome back!" },
+    gameLoaded: { es: "Tu partida ha sido cargada.", en: "Your game has been loaded." },
+    itemUsed: { es: "Objeto Usado", en: "Item Used" },
+    itemUsedMsg: { es: (name) => ({ es: `Has usado ${name}.`, en: `You used ${name}.` }) },
+    cannotEquip: { es: "No Equipable", en: "Cannot Equip" },
+    cannotEquipMsg: { es: "Este objeto no se puede equipar.", en: "This item cannot be equipped." },
 
     // ---- Textos de Recompensas de Misión ----
     missionReturn: { es: "¡Ha vuelto de la misión!", en: "She has returned from the mission!" },
@@ -82,31 +94,67 @@ const UI_TEXTS = {
 
 // --- BASE DE DATOS DE OBJETOS (Simulada) ---
 const masterItemList = {
-    // Equipamiento
-    'cheap_shirt': { name: { es: 'Camisa Barata', en: 'Cheap Shirt' }, type: 'top', path: './img/tops/cheapShirt.png', buyPrice: 50, sellPrice: 15 },
-    'good_shirt': { name: { es: 'Camisa Buena', en: 'Good Shirt' }, type: 'top', path: './img/tops/goodShirt.png', buyPrice: 75, sellPrice: 30 },
-    'leather_shirt': { name: { es: 'Camisa de Cuero', en: 'Leather Shirt' }, type: 'top', path: './img/tops//leatherShirt.png', buyPrice: 15, sellPrice: 80 },
-    'cheap_pants': { name: { es: 'Pantalones Baratos', en: 'Cheap Pants' }, type: 'bottom', path: './img/bottoms/cheapPants.png', buyPrice: 50, sellPrice: 15 },
-    'good_pants': { name: { es: 'Pantalones Buenos', en: 'Good Pants' }, type: 'bottom', path: './img/bottoms/goodPants.png', buyPrice: 75, sellPrice: 30 },
-    'leather_skirt': { name: { es: 'Falda de Cuero', en: 'Leather Skirt' }, type: 'bottom', path: './img/bottoms/leatherSkirt.png', buyPrice: 15, sellPrice: 30 },
-    'bunny_suit': { name: { es: 'Traje de Conejita', en: 'Bunny Suit' }, type: 'suit', path: './img/suits/bunny_suit.png', buyPrice: 2000, sellPrice: 500, requiredAffinity: 60 },
-    'bunny_ears': { name: { es: 'Traje de Conejita', en: 'Bunny Suit' }, type: 'suit', path: './img/head/bunny_ears.png', buyPrice: 500, sellPrice: 500, requiredAffinity: 60 },
-    'leather_stokckings': { name: { es: 'Medias de Cuero', en: 'Leather Stockings' }, type: 'stockings', path: './img/stockings/leatherStocks.png', buyPrice: 100, sellPrice: 500, requiredAffinity: 60 },
-    'bunny_stokckings': { name: { es: 'Medias de Conejita', en: 'Bunny Stockings' }, type: 'stockings', path: './img/stockings/bunny_stocks.png', buyPrice: 20, sellPrice: 500, requiredAffinity: 60 },
-    'wooden_sword': { name: { es: 'Espada de Madera', en: 'Wooden Sword' }, type: 'weapon', path: './img/items/sword_wood.png', buyPrice: 100, sellPrice: 25, effects: { missionBonus: { nothingChance: -0.05, itemChance: 0.05 } } },
-    'iron_sword': { name: { es: 'Espada de Hierro', en: 'Iron Sword' }, type: 'weapon', path: './img/items/sword_iron.png', buyPrice: 500, sellPrice: 125, effects: { missionBonus: { nothingChance: -0.15, itemChance: 0.15 } } },
-    'steel_sword': { name: { es: 'Espada de Acero', en: 'Steel Sword' }, type: 'weapon', path: './img/items/sword_steel.png', buyPrice: 0, sellPrice: 400, effects: { missionBonus: { nothingChance: -0.25, itemChance: 0.25 } } },
+    // ---- Ropa Interior ----
+    'bra_1': { name: { es: 'Sujetador Básico', en: 'Basic Bra' }, type: 'bra', path: './img/bra/bra_1.png', requiredAffinity: 40 },
+    'bra_2': { name: { es: 'Sujetador de Encaje', en: 'Lace Bra' }, type: 'bra', path: './img/bra/bra_2.png', requiredAffinity: 40 },
+    'pantsus_1': { name: { es: 'Braguitas Básicas', en: 'Basic Panties' }, type: 'pantsus', path: './img/pantsus/pantsus_1.png', requiredAffinity: 40 },
+    'pantsus_2': { name: { es: 'Braguitas de Lazo', en: 'Ribbon Panties' }, type: 'pantsus', path: './img/pantsus/pantsus_2.png', requiredAffinity: 40 },
     
-    // Consumibles
-    'energy_drink': { name: { es: 'Bebida Energética', en: 'Energy Drink' }, type: 'consumable', path: './img/items/energy_drink.png', buyPrice: 30, sellPrice: 10, effects: { energy: 25 } },
+    // ---- Ropa Casual ----
+    'cheap_shirt': { name: { es: 'Camisa Barata', en: 'Cheap Shirt' }, type: 'top', path: './img/tops/cheap_shirt.png' },
+    'good_shirt': { name: { es: 'Camisa Buena', en: 'Good Shirt' }, type: 'top', path: './img/tops/good_shirt.png' },
+    'casual_top': { name: { es: 'Top Casual', en: 'Casual Top' }, type: 'top', path: './img/tops/casual_top.png' },
+    'cheap_pants': { name: { es: 'Pantalones Baratos', en: 'Cheap Pants' }, type: 'bottom', path: './img/bottoms/cheap_pants.png' },
+    'good_pants': { name: { es: 'Pantalones Buenos', en: 'Good Pants' }, type: 'bottom', path: './img/bottoms/good_pants.png' },
+    'mini_skirt': { name: { es: 'Mini Falda', en: 'Mini Skirt' }, type: 'bottom', path: './img/bottoms/mini_skirt.png' },
     
-    // Materiales
-    'wood_plank': { name: { es: 'Tabla de Madera', en: 'Wood Plank' }, type: 'material', path: './img/items/wood.png', buyPrice: 10, sellPrice: 2 },
-    'iron_ore': { name: { es: 'Mena de Hierro', en: 'Iron Ore' }, type: 'material', path: './img/items/iron.png', buyPrice: 40, sellPrice: 10 },
-    'steel_ingot': { name: { es: 'Lingote de Acero', en: 'Steel Ingot' }, type: 'material', path: './img/items/steel.png', buyPrice: 0, sellPrice: 80 },
+    // ---- Trajes y Sets Temáticos ----
+    'bunny_suit': { name: { es: 'Traje de Conejita', en: 'Bunny Suit' }, type: 'suit', path: './img/suits/bunny_suit.png', requiredAffinity: 70 },
+    'bunny_ears': { name: { es: 'Orejas de Coneja', en: 'Bunny Ears' }, type: 'head', path: './img/head/bunny_ears.png', requiredAffinity: 70 },
+    'bunny_stocks': { name: { es: 'Medias de Conejita', en: 'Bunny Stockings' }, type: 'stockings', path: './img/stocks/bunny_stocks.png', requiredAffinity: 70 },
+    'east_suit': { name: { es: 'Atuendo Oriental', en: 'Eastern Outfit' }, type: 'suit', path: './img/suits/east_suit.png', requiredAffinity: 70 },
+    'east_stocks': { name: { es: 'Medias Orientales', en: 'Eastern Stockings' }, type: 'stockings', path: './img/stocks/east_stocks.png', requiredAffinity: 70 },
+    'leotard': { name: { es: 'Leotardo', en: 'Leotard' }, type: 'suit', path: './img/suits/leotard.png', requiredAffinity: 80 },
+    'maid_diadema': { name: { es: 'Diadema de Doncella', en: 'Maid Diadem' }, type: 'head', path: './img/head/maid_diadema.png', requiredAffinity: 50 },
+    'maid_top': { name: { es: 'Top de Doncella', en: 'Maid Top' }, type: 'top', path: './img/tops/maid_top.png', requiredAffinity: 50 },
+    'maid_skirt': { name: { es: 'Falda de Doncella', en: 'Maid Skirt' }, type: 'bottom', path: './img/bottoms/maid_skirt.png', requiredAffinity: 50 },
+    'maid_stocks': { name: { es: 'Medias de Doncella', en: 'Maid Stockings' }, type: 'stockings', path: './img/stocks/maid_stocks.png', requiredAffinity: 50 },
+    'maid_guantelets': { name: { es: 'Guantes de Doncella', en: 'Maid Gauntlets' }, type: 'hands', path: './img/hands/maid_guantelets.png', requiredAffinity: 50 },
+    'neko_ears': { name: { es: 'Orejas de Gato', en: 'Cat Ears' }, type: 'head', path: './img/head/neko_ears.png' },
+    
+    // ---- Equipamiento de Cuero (Crafteable) ----
+    'leather_shirt': { name: { es: 'Coraza de Cuero', en: 'Leather Cuirass' }, type: 'top', path: './img/tops/leather_shirt.png' },
+    'leather_skirt': { name: { es: 'Falda de Cuero', en: 'Leather Skirt' }, type: 'bottom', path: './img/bottoms/leather_skirt.png' },
+    'leather_guantelets': { name: { es: 'Guanteletes de Cuero', en: 'Leather Gauntlets' }, type: 'hands', path: './img/hands/leather_guantelets.png' },
+    'leather_stocks': { name: { es: 'Medias de Cuero', en: 'Leather Stockings' }, type: 'stockings', path: './img/stocks/leatherStocks.png' },
 
-    // Recetas (como objetos que se aprenden)
-    'recipe_steel_sword': { name: { es: 'Receta: Espada de Acero', en: 'Recipe: Steel Sword' }, type: 'recipe', path: './img/items/recipe.png', buyPrice: 1000, sellPrice: 250, recipeId: 'steel_sword_recipe' },
+    // ---- Equipamiento de Acero (Crafteable) ----
+    'steel_armor': { name: { es: 'Armadura de Acero', en: 'Steel Armor' }, type: 'top', path: './img/tops/steel_armor.png' },
+    'steel_skirt': { name: { es: 'Falda de Acero', en: 'Steel Skirt' }, type: 'bottom', path: './img/bottoms/steel_skirt.png' },
+    'steel_guantelets': { name: { es: 'Guanteletes de Acero', en: 'Steel Gauntlets' }, type: 'hands', path: './img/hands/steel_guantelets.png' },
+    'steel_stocks': { name: { es: 'Mallas de Acero', en: 'Steel Stockings' }, type: 'stockings', path: './img/stocks/steel_stocks.png' },
+
+    // ---- Equipamiento de Escamas (Crafteable) ----
+    'scale_armor': { name: { es: 'Coraza de Escamas', en: 'Scale Cuirass' }, type: 'top', path: './img/tops/scale_armor.png' },
+    'scale_skirt': { name: { es: 'Falda de Escamas', en: 'Scale Skirt' }, type: 'bottom', path: './img/bottoms/scale_skirt.png' },
+    'scale_guantelets': { name: { es: 'Guanteletes de Escamas', en: 'Scale Gauntlets' }, type: 'hands', path: './img/hands/scale_guantelets.png' },
+    'scale_stocks': { name: { es: 'Medias de Escamas', en: 'Scale Stockings' }, type: 'stockings', path: './img/stocks/scale_stocks.png' },
+
+    // ---- Armas ----
+    'wooden_sword': { name: { es: 'Espada de Madera', en: 'Wooden Sword' }, type: 'weapon', path: './img/items/sword_wood.png', effects: { missionBonus: { nothingChance: -0.05, itemChance: 0.05 } } },
+    'iron_sword': { name: { es: 'Espada de Hierro', en: 'Iron Sword' }, type: 'weapon', path: './img/items/sword_iron.png', effects: { missionBonus: { nothingChance: -0.15, itemChance: 0.15 } } },
+    'steel_sword': { name: { es: 'Espada de Acero', en: 'Steel Sword' }, type: 'weapon', path: './img/items/sword_steel.png', effects: { missionBonus: { nothingChance: -0.25, itemChance: 0.25 } } },
+    
+    // ---- Consumibles ----
+    'energy_drink': { name: { es: 'Bebida Energética', en: 'Energy Drink' }, type: 'consumable', path: './img/items/energy_drink.png', effects: { energy: 25 } },
+    
+    // ---- Materiales ----
+    'wood_plank': { name: { es: 'Tabla de Madera', en: 'Wood Plank' }, type: 'material', path: './img/items/wood.png' },
+    'iron_ore': { name: { es: 'Mena de Hierro', en: 'Iron Ore' }, type: 'material', path: './img/items/iron.png' },
+    'steel_ingot': { name: { es: 'Lingote de Acero', en: 'Steel Ingot' }, type: 'material', path: './img/items/steel.png' },
+
+    // ---- Recetas ----
+    'recipe_steel_sword': { name: { es: 'Receta: Espada de Acero', en: 'Recipe: Steel Sword' }, type: 'recipe', path: './img/items/recipe.png', recipeId: 'steel_sword_recipe' },
 };
 
 // --- BASE DE DATOS DE RECETAS ---
@@ -125,11 +173,54 @@ const recipes = {
             { id: 'steel_ingot', quantity: 1 },
         ]
     },
+    'leather_shirt_recipe': { 
+        result: 'leather_shirt', 
+        ingredients: [ 
+            { id: 'wood_plank', quantity: 2 } 
+        ] 
+    },
+    'leather_skirt_recipe': { 
+        result: 'leather_skirt', 
+        ingredients: 
+        [ 
+            { id: 'wood_plank', quantity: 2 } 
+        ] 
+    },
     // Aquí se podrían añadir más recetas...
 };
 
+// --- FUNCIÓN DE CÁLCULO DE PRECIOS ---
+// Base: 100, Factor: 1.5. Nivel 1: 100, Nivel 2: ~183, Nivel 3: ~294
+function calculatePrice(basePrice, level) {
+    return Math.floor(basePrice * Math.log(level + 1) * 1.5);
+}
+
 // --- BASE DE DATOS DE LA TIENDA ---
-const shopInventory = [ 'cheap_shirt', 'cheap_pants', 'wooden_sword', 'iron_sword', 'energy_drink', 'wood_plank', 'iron_ore', 'recipe_steel_sword', 'bunny_suit', 'bunny_ears', 'bunny_stokckings', 'good_pants', 'good_shirt', 'leather_shirt', 'leather_skirt', 'leather_stokckings' ];
+const shopInventory = [];
+Object.keys(masterItemList).forEach(id => {
+    const item = masterItemList[id];
+    // Asignar precios dinámicos a ropa y armas no crafteables
+    if (item.type === 'top' || item.type === 'bottom' || item.type === 'weapon') {
+        if (!Object.values(recipes).find(r => r.result === id)) {
+            // Un "nivel" arbitrario para la fórmula de precios
+            let itemLevel = 1;
+            if (id.includes('good')) itemLevel = 3;
+            if (id.includes('iron')) itemLevel = 5;
+            item.buyPrice = calculatePrice(100, itemLevel);
+            item.sellPrice = Math.floor(item.buyPrice / 3);
+            shopInventory.push(id);
+        }
+    }
+    // Añadir sets temáticos y otros objetos a la tienda manualmente
+    if (['suit', 'head', 'stockings', 'consumable'].includes(item.type)) {
+         // Precios fijos para estos
+        if(item.buyPrice === undefined) {
+          item.buyPrice = 500; 
+          item.sellPrice = 150;
+        }
+        shopInventory.push(id);
+    }
+});
 
 // --- REACCIONES POR AFINIDAD ---
 const affinityReactions = [
@@ -146,7 +237,9 @@ const missionLoot = {
 };
 
 // --- ESTADO DEL JUEGO ---
+const GAME_VERSION = "0.0.1";
 const gameState = {
+    version: GAME_VERSION,
     language: 'en',
     affinity: 10,
     money: 100,
@@ -157,11 +250,14 @@ const gameState = {
     hasCompletedIntro: false,
     inventory: [],
     equipped: {
-        top: null,
-        bottom: null,
+        top: 'cheap_shirt',      // Equipada por defecto
+        bottom: 'cheap_pants',   // Equipada por defecto
         suit: null,
         head: null,
         stockings: null,
+        bra: 'bra_1',
+        pantsus: 'pantsus_1',
+        hands: null,
         weapon: null,
     },
     knownRecipes: [],
@@ -218,6 +314,9 @@ const craftingModal = document.getElementById("craftingModal");
 const recipeBookModal = document.getElementById("recipeBookModal");
 const characterSuit = document.getElementById("characterSuit");
 const characterHead = document.getElementById("characterHead");
+const characterBra = document.getElementById("characterBra");
+const characterPantsus = document.getElementById("characterPantsus");
+const characterHands = document.getElementById("characterHands");
 const reactionDialogue = document.getElementById("reactionDialogue");
 const introModal = document.getElementById("introModal");
 const introContent = document.getElementById("introContent");
@@ -507,12 +606,11 @@ function renderInventory() {
         const itemData = masterItemList[item.id];
         const itemDiv = document.createElement("div");
         itemDiv.className = "inventory-item";
-        const isEquipped = Object.values(gameState.equipped).includes(item.id); // Corregido para que funcione con todos los tipos de equipo
+        const isEquipped = Object.values(gameState.equipped).includes(item.id);
         if (isEquipped) {
             itemDiv.classList.add("equipped");
         }
-
-        // --- CORRECCIÓN AQUÍ ---
+        
         const itemName = itemData.name[gameState.language] || itemData.name['en'];
         
         itemDiv.innerHTML = `
@@ -527,44 +625,99 @@ function renderInventory() {
 function handleItemClick(itemId) {
     const itemData = masterItemList[itemId];
     const itemType = itemData.type;
-
-    // Lógica para Consumibles y Recetas (como antes)
-    if (itemType === 'recipe') { /* ... */ return; }
-    if (itemType === 'consumable') { 
-        // TODO: Implementar lógica de consumibles
-        showNotification("Consumible", "Aún no se pueden usar objetos desde aquí.");
+    
+    // --- Lógica para tipos de objeto no equipables ---
+    if (itemType === 'consumable') {
+        useConsumable(itemId);
+        return;
+    }
+    
+    const EQUIPABLE_TYPES = ['top', 'bottom', 'suit', 'head', 'stockings', 'bra', 'pantsus', 'hands', 'weapon'];
+    if (!EQUIPABLE_TYPES.includes(itemType)) {
+        showNotification(getText('cannotEquip'), getText('cannotEquipMsg'));
         return;
     }
 
-    // NUEVA VALIDACIÓN DE AFINIDAD
-    if (itemData.requiredAffinity && gameState.affinity < itemData.requiredAffinity) {
-        showNotification("Afinidad Insuficiente", `Necesitas ${itemData.requiredAffinity} de afinidad para equipar esto.`);
-        return;
-    }
+    // --- LÓGICA DE EQUIPAMIENTO ---
 
-    // Lógica de Equipamiento
-    if (['top', 'bottom', 'weapon', 'head', 'suit'].includes(itemType)) {
-        // Desequipar el objeto actual si se hace clic en él
-        if (gameState.equipped[itemType] === itemId) {
-            gameState.equipped[itemType] = null;
-        } else {
-            // Equipar el nuevo objeto
-            gameState.equipped[itemType] = itemId;
+    const isCurrentlyEquipped = gameState.equipped[itemType] === itemId;
+    const affinityReq = itemData.requiredAffinity || 0;
 
-            // LÓGICA DE TRAJES (SUIT)
-            if (itemType === 'suit') {
-                // Si equipamos un traje, desequipamos top y bottom
-                gameState.equipped.top = null;
-                gameState.equipped.bottom = null;
-            } else if (itemType === 'top' || itemType === 'bottom') {
-                // Si equipamos un top o bottom, desequipamos el traje
-                gameState.equipped.suit = null;
-            }
+    if (isCurrentlyEquipped) {
+        // --- INTENTO DE DESEQUIPAR ---
+
+        // VALIDACIÓN ESPECIAL para 'bra' y 'pantsus'
+        if ((itemType === 'bra' || itemType === 'pantsus') && gameState.affinity < affinityReq) {
+            showNotification(
+                getText('insufficientAffinity'), 
+                // Mensaje personalizado para esta situación
+                { es: `No se lo quiere quitar... (necesita ${affinityReq} de afinidad).`, en: `She doesn't want to take it off... (needs ${affinityReq} affinity).` }[gameState.language]
+            );
+            return; // Se detiene la acción
+        }
+
+        // Si pasa la validación (o no es ropa interior), se desequipa.
+        gameState.equipped[itemType] = null;
+        
+    } else {
+        // --- INTENTO DE EQUIPAR ---
+
+        // VALIDACIÓN DE AFINIDAD (se salta para 'bra' y 'pantsus')
+        if (itemType !== 'bra' && itemType !== 'pantsus' && gameState.affinity < affinityReq) {
+            showNotification(getText('insufficientAffinity'), getText('insufficientAffinityMsg')(affinityReq));
+            return;
+        }
+
+        // Si pasa la validación, se equipa.
+        gameState.equipped[itemType] = itemId;
+
+        // Reglas de conflicto
+        if (itemType === 'suit') {
+            gameState.equipped.top = null;
+            gameState.equipped.bottom = null;
+            gameState.equipped.bra = null;
+            gameState.equipped.pantsus = null;
+        } else if (['top', 'bottom', 'bra', 'pantsus'].includes(itemType)) {
+            gameState.equipped.suit = null;
         }
     }
     
     updateUI();
     renderInventory();
+}
+
+// --- Lógica para Usar Consumibles (NUEVA) ---
+function useConsumable(itemId) {
+    const itemData = masterItemList[itemId];
+    const itemInInventory = gameState.inventory.find(i => i.id === itemId);
+
+    if (!itemInInventory) return; // No debería pasar, pero por seguridad
+
+    // Aplicar efectos
+    if (itemData.effects) {
+        if (itemData.effects.energy) {
+            gameState.energy += itemData.effects.energy;
+            if (gameState.energy > 100) gameState.energy = 100;
+        }
+        // Aquí podrías añadir más efectos, como +afinidad, +vida, etc.
+    }
+
+    // Reducir cantidad o eliminar del inventario
+    itemInInventory.quantity--;
+    if (itemInInventory.quantity <= 0) {
+        gameState.inventory = gameState.inventory.filter(i => i.id !== itemId);
+    }
+
+    showNotification(
+        getText('itemUsed'), 
+        getText('itemUsedMsg')(itemData.name[gameState.language])
+    );
+    
+    updateUI();
+    // Re-renderizar la vista de inventario si sigue abierta
+    if (!inventoryModal.classList.contains('hidden')) {
+        renderInventory();
+    }
 }
 
 closeInventoryModalButton.addEventListener("click", () => hideModal(inventoryModal));
@@ -924,42 +1077,22 @@ function updateUI() {
     energyDisplay.textContent = Math.floor(gameState.energy);
     satietyDisplay.textContent = Math.floor(gameState.satiety);
 
-    // --- Personaje ---
-    // Traje (Suit) - Se renderiza primero para estar debajo de cabeza/arma
-    if (gameState.equipped.suit) {
-        characterSuit.src = masterItemList[gameState.equipped.suit].path;
-        characterSuit.classList.remove('hidden-item');
-    } else {
-        characterSuit.classList.add('hidden-item');
-    }
-
-    // Top y Bottom solo se muestran si no hay un traje equipado
-    if (gameState.equipped.top && !gameState.equipped.suit) {
-        characterTop.src = masterItemList[gameState.equipped.top].path;
-        characterTop.classList.remove('hidden-item');
-    } else {
-        characterTop.classList.add('hidden-item');
-    }
-    if (gameState.equipped.bottom && !gameState.equipped.suit) {
-        characterBottom.src = masterItemList[gameState.equipped.bottom].path;
-        characterBottom.classList.remove('hidden-item');
-    } else {
-        characterBottom.classList.add('hidden-item');
-    }
-
-    if (gameState.equipped.head) {
-        characterHead.src = masterItemList[gameState.equipped.head].path;
-        characterHead.classList.remove('hidden-item');
-    } else {
-        characterHead.classList.add('hidden-item');
-    }
-
-    if (gameState.equipped.stockings) {
-        characterStockings.src = masterItemList[gameState.equipped.stockings].path;
-        characterStockings.classList.remove('hidden-item');
-    } else {
-        characterStockings.classList.add('hidden-item');
-    }
+    // --- RENDERIZADO DE PERSONAJE ---
+    const layersToUpdate = ['suit', 'top', 'bottom', 'head', 'stockings', 'bra', 'pantsus', 'hands'];
+    layersToUpdate.forEach(type => {
+        const element = document.getElementById(`character${type.charAt(0).toUpperCase() + type.slice(1)}`);
+        if (gameState.equipped[type]) {
+            // Lógica de conflicto para top/bottom
+            if ((type === 'top' || type === 'bottom') && gameState.equipped.suit) {
+                element.classList.add('hidden-item');
+                return;
+            }
+            element.src = masterItemList[gameState.equipped[type]].path;
+            element.classList.remove('hidden-item');
+        } else {
+            element.classList.add('hidden-item');
+        }
+    });
 
     // Expresiones
     characterEyes.src = gameState.expression.eyes;
@@ -1088,11 +1221,12 @@ function startDialogue() {
 // <-- Función para guardar el juego
 function saveGame() {
     try {
+        gameState.version = GAME_VERSION; // Aseguramos que se guarda la versión actual
         localStorage.setItem(SAVE_KEY, JSON.stringify(gameState));
-        showNotification("Progreso Guardado", "¡Tu partida se ha guardado correctamente!");
+        showNotification(getText('saveSuccessTitle'), getText('saveSuccessMsg'));
     } catch (error) {
         console.error("Error al guardar la partida:", error);
-        showNotification("Error", "No se pudo guardar la partida. El almacenamiento podría estar lleno.");
+        showNotification(getText('saveErrorTitle'), getText('saveErrorMsg'));
     }
 }
 
@@ -1100,19 +1234,26 @@ function saveGame() {
 function loadGame() {
     const savedData = localStorage.getItem(SAVE_KEY);
     if (!savedData) {
-        return false; // No hay partida guardada
+        return false;
     }
 
     try {
         const savedState = JSON.parse(savedData);
-        // Usamos Object.assign para fusionar el estado guardado en nuestro gameState actual.
-        // Esto preserva las funciones y la estructura si en el futuro añadimos nuevas propiedades.
+        
+        // --- VERIFICACIÓN DE VERSIÓN ---
+        if (savedState.version !== GAME_VERSION) {
+            console.warn(`Partida guardada de una versión antigua (${savedState.version}) detectada. La versión actual es ${GAME_VERSION}. Reiniciando.`);
+            localStorage.removeItem(SAVE_KEY);
+            showNotification(getText('saveVersionMismatchTitle'), getText('saveVersionMismatchMsg'));
+            return false; // Tratamos la partida como inválida
+        }
+
         Object.assign(gameState, savedState);
         console.log("Partida cargada exitosamente.");
         return true;
     } catch (error) {
         console.error("Error al cargar datos guardados (posiblemente corruptos). Empezando de cero.", error);
-        localStorage.removeItem(SAVE_KEY); // Limpiamos los datos corruptos
+        localStorage.removeItem(SAVE_KEY);
         return false;
     }
 }
@@ -1192,37 +1333,44 @@ function startNewGame() {
     console.log("Iniciando una nueva partida.");
     addItemToInventory("cheap_shirt", 1);
     addItemToInventory("cheap_pants", 1);
+    addItemToInventory("bra_1", 1);
+    addItemToInventory("pantsus_1", 1);
 }
 
 function initializeGame() {
+    // Si loadGame() devuelve true, es que se cargó una partida
     if (loadGame()) {
-        showNotification("¡Bienvenida de nuevo!", "Tu partida ha sido cargada.");
+        showNotification(getText('welcomeBack'), getText('gameLoaded'));
         if (gameState.energy < 100) startEnergyRecovery();
         if (gameState.satiety > 0) startSatietyDecay();
-        saveButton.classList.remove('disabled-link');
-        updateUI();
     } else {
-        // Si no hay partida guardada, no hacemos nada aquí.
-        // La intro se encargará de todo.
-        saveButton.classList.remove('disabled-link');
+        // Si no hay partida guardada, o era inválida, se empieza una nueva.
+        startNewGame();
     }
+    
+    saveButton.classList.remove('disabled-link');
+    updateUI();
 }
 
 // PUNTO DE ENTRADA PRINCIPAL
 document.addEventListener('DOMContentLoaded', () => {
+    // No llamamos a loadGame() aquí directamente, lo hará initializeGame
     const savedData = localStorage.getItem(SAVE_KEY);
     if (savedData) {
         const savedState = JSON.parse(savedData);
-        if (savedState.hasCompletedIntro) {
-            // Si ya completó la intro, inicializamos el juego normalmente
+        if (savedState.hasCompletedIntro && savedState.version === GAME_VERSION) {
+            // Si ya completó la intro Y la versión es compatible, inicializamos el juego normalmente
             initializeGame();
         } else {
-            // Caso raro: guardó a mitad de la intro. La reiniciamos.
+            // Si la intro no está completa O la versión es antigua, reiniciamos.
+            if(savedState.version !== GAME_VERSION) {
+                showNotification(getText('saveVersionMismatchTitle'), getText('saveVersionMismatchMsg'));
+            }
+            localStorage.removeItem(SAVE_KEY);
             runIntroScene();
         }
     } else {
         // No hay datos guardados, es la primera vez que juega.
-        localStorage.removeItem(SAVE_KEY);
         runIntroScene();
     }
 });

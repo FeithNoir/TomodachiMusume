@@ -157,6 +157,16 @@ body {
   opacity: 0.5;
 }
 
+#patreonButton {
+  background-color: black;
+  color: white;
+}
+
+#patreonButton:hover {
+  background-color: white;
+  color: black;
+}
+
 /* Estilos para tablets */
 @media (min-width: 768px) {
   .modal-content-panel {
