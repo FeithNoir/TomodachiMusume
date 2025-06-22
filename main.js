@@ -375,18 +375,18 @@ function runIntroScene() {
         if (currentStep.prompt === 'language') {
             contentHTML += `
                 <div class="my-4 flex flex-col sm:flex-row justify-center items-center gap-4">
-                    <button class="lang-choice action-button !w-auto !px-6" data-lang="es">Español</button>
-                    <button class="lang-choice action-button !w-auto !px-6" data-lang="en">English</button>
+                    <button class="lang-choice intro-button !w-auto !px-6" data-lang="es">Español</button>
+                    <button class="lang-choice intro-button !w-auto !px-6" data-lang="en">English</button>
                 </div>
             `;
         } else if (currentStep.prompt === 'playerName') {
             contentHTML += `
                 <input type="text" id="nameInput" class="w-full max-w-sm p-2 rounded bg-amber-950 text-center my-4" placeholder="${getText('placeholder_name')}">
-                <button id="confirmNameButton" class="action-button !w-auto !px-6 mx-auto">${getText('confirm')}</button>
+                <button id="confirmNameButton" class="intro-button !w-auto !px-6 mx-auto">${getText('confirm')}</button>
             `;
         } else {
             // Para cualquier otro paso que no tenga prompt, se crea el botón "Siguiente"
-            contentHTML += `<button id="continueIntroButton" class="action-button !w-auto !px-6 mx-auto mt-6">${getText('next')}</button>`;
+            contentHTML += `<button id="continueIntroButton" class="intro-button !w-auto !px-6 mx-auto mt-6">${getText('next')}</button>`;
         }
         
         introContent.innerHTML = contentHTML;

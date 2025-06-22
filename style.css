@@ -129,7 +129,7 @@ body {
   background-color: #a14b15;
 }
 
-.action-button {
+.action-button, .intro-button {
   background-color: #b45309;
   color: white;
   padding: 0.5rem;
