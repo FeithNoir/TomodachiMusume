@@ -1,3 +1,7 @@
+/* ================================================================================= */
+/* STYLES: Globales y Generales */
+/* Responsabilidad: Estilos base para el body, fuentes y elementos comunes. */
+/* ================================================================================= */
 body {
   font-family: "Inter", sans-serif;
   overflow: hidden;
@@ -19,27 +23,38 @@ body {
   z-index: -1;
 }
 
-/* Contenedor del personaje */
+.hidden-item {
+  display: none;
+}
+
+.disabled-link {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* ================================================================================= */
+/* COMPONENT: CharacterComponent */
+/* Responsabilidad: Estilos para el contenedor del personaje y sus capas. */
+/* ================================================================================= */
 .character-container {
   height: 80vh;
   width: 100%;
   width: auto;
   cursor: pointer;
-  pointer-events: none; /* <-- AÑADIDO: El contenedor ya no captura clics */
+  pointer-events: none; /* El contenedor no captura clics */
 }
 
 .character-container > img {
   transform: translateY(25%);
 }
 
-/* Cada capa del personaje */
 .character-layer {
   position: absolute;
   bottom: 0;
   height: 130vh;
   object-fit: contain;
   transition: opacity 0.2s ease-in-out;
-  pointer-events: auto; /* <-- AÑADIDO: Cada capa individualmente sí captura clics */
+  pointer-events: auto; /* Las capas individuales sí capturan clics */
 }
 
 #reactionDialogue {
@@ -49,16 +64,41 @@ body {
   margin: 0 auto;
 }
 
+/* ================================================================================= */
+/* COMPONENT: MissionModalComponent */
+/* Responsabilidad: Estilos para la barra de progreso de la misión. */
+/* ================================================================================= */
 .progress-bar {
   background: #f59e0b;
   transition: width 0.5s ease-in-out;
 }
 
+/* ================================================================================= */
+/* COMPONENT: TalkModalComponent */
+/* Responsabilidad: Estilos para el modal de diálogo y sus opciones. */
+/* ================================================================================= */
 #talkModal {
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
-/* Estilos para el inventario (NUEVO) */
+.dialogue-option-button {
+  background-color: #92400e;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  margin: 0.25rem;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.dialogue-option-button:hover {
+  background-color: #a14b15;
+}
+
+/* ================================================================================= */
+/* COMPONENT: InventoryModalComponent & MarketModalComponent */
+/* Responsabilidad: Estilos para los items en el inventario, tienda y crafteo. */
+/* ================================================================================= */
 .inventory-item {
   position: relative;
   background-color: #92400e;
@@ -91,7 +131,10 @@ body {
   border-radius: 99px;
 }
 
-/* Resto de estilos (modal, botones, etc.) sin cambios */
+/* ================================================================================= */
+/* COMPONENT: GenericModalComponent */
+/* Responsabilidad: Estilos genéricos para todos los modales. */
+/* ================================================================================= */
 .modal {
   position: fixed;
   top: 0;
@@ -115,20 +158,10 @@ body {
   text-align: center;
 }
 
-.dialogue-option-button {
-  background-color: #92400e;
-  color: white;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  margin: 0.25rem;
-  transition: background-color 0.3s;
-  width: 100%;
-}
-
-.dialogue-option-button:hover {
-  background-color: #a14b15;
-}
-
+/* ================================================================================= */
+/* COMPONENT: ActionsComponent & MenuComponent */
+/* Responsabilidad: Estilos para los botones de acción y botones de menú. */
+/* ================================================================================= */
 .action-button, .intro-button {
   background-color: #b45309;
   color: white;
@@ -138,9 +171,8 @@ body {
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s;
-  /* Ajustamos el ancho para que sea flexible */
-  flex-grow: 1; /* Para que ocupen el espacio en la barra móvil */
-  margin: 0 0.25rem; /* Pequeño espacio entre botones en móvil */
+  flex-grow: 1; 
+  margin: 0 0.25rem; 
 }
 
 #actionsMenu .action-button {
@@ -149,15 +181,6 @@ body {
 
 .action-button:hover {
   background-color: #c35b11;
-}
-
-.hidden-item {
-  display: none;
-}
-
-.disabled-link {
-  pointer-events: none;
-  opacity: 0.5;
 }
 
 #patreonButton {
@@ -169,6 +192,24 @@ body {
   background-color: white;
   color: black;
 }
+
+/* ================================================================================= */
+/* COMPONENT: IntroModalComponent */
+/* Responsabilidad: Animaciones específicas para la introducción. */
+/* ================================================================================= */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* ================================================================================= */
+/* STYLES: Responsivos (Media Queries) */
+/* Responsabilidad: Ajustar los estilos para diferentes tamaños de pantalla. */
+/* ================================================================================= */
 
 /* Estilos para tablets */
 @media (min-width: 768px) {
@@ -184,9 +225,9 @@ body {
   .action-button {
     padding: 0.75rem;
     font-size: 1rem;
-    width: 100%; /* Vuelve a ocupar todo el ancho en la vista de escritorio */
-    flex-grow: 0; /* Desactivamos el crecimiento flexible */
-    margin: 0; /* Quitamos el margen horizontal */
+    width: 100%;
+    flex-grow: 0;
+    margin: 0;
   }
 
   #actionsMenu .action-button {
